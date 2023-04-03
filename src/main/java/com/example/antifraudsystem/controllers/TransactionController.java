@@ -1,15 +1,26 @@
 package com.example.antifraudsystem.controllers;
 
 import com.example.antifraudsystem.Transaction;
-import jakarta.websocket.server.PathParam;
+import com.example.antifraudsystem.User;
+import com.example.antifraudsystem.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 public class TransactionController {
+
+    UserRepository userRepository;
+
+    @Autowired
+    public TransactionController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostMapping("/api/antifraud/transaction")
     public ResponseEntity<?> validateAmount(@RequestBody Transaction transaction) {
@@ -29,8 +40,15 @@ public class TransactionController {
     }
 
     @GetMapping("/api/auth/list")
-    public void showAllUsers() {
-        System.out.println("list");
+    public List<User> showAllUsers() {
+        List<User> res = new ArrayList<>();
+        Iterable<User> users = userRepository.findAll();
+
+        for (User user : users) {
+            res.add(user);
+        }
+
+        return res;
     }
 
     @DeleteMapping("/api/auth/user/{username}")
