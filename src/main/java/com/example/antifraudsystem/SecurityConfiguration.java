@@ -35,7 +35,8 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/user").permitAll()
-                        .requestMatchers("/api/auth/**").hasRole("USER")
+//                        .requestMatchers("/api/auth/**").hasRole("USER")
+                        .requestMatchers("/**").permitAll()
                 )
                 .csrf().disable()
                 .httpBasic(withDefaults());
