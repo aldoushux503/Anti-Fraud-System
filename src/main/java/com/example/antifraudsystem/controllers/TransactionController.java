@@ -1,5 +1,6 @@
-package com.example.antifraudsystem;
+package com.example.antifraudsystem.controllers;
 
+import com.example.antifraudsystem.Transaction;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
