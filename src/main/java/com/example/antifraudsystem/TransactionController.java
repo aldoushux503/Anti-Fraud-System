@@ -29,12 +29,12 @@ public class TransactionController {
 
     @GetMapping("/api/auth/list")
     public void showAllUsers() {
-
+        System.out.println("list");
     }
 
     @DeleteMapping("/api/auth/user/{username}")
     public void deleteUser(@PathVariable("username") String username) {
-
+        System.out.println("delete");
     }
 
 }

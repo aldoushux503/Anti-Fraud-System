@@ -8,6 +8,6 @@ public class RegistrationController {
 
     @PostMapping("/api/auth/user")
     public void registrationUser() {
-        
+        System.out.println("registrate");
     }
 }
