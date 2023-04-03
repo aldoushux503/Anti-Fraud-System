@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
@@ -13,7 +12,7 @@ import java.util.Map;
 public class TransactionController {
 
     @PostMapping("/api/antifraud/transaction")
-    public ResponseEntity<?> validateAmount(@RequestBody TransactionService transaction) {
+    public ResponseEntity<?> validateAmount(@RequestBody Transaction transaction) {
         long amount = transaction.amount();
 
         if (amount <= 0) {
