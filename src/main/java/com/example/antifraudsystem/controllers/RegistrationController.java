@@ -23,7 +23,6 @@ public class RegistrationController {
     @PostMapping("/api/auth/user")
     public void register(@RequestBody User user) {
         user.setPassword(encoder.encode(user.getPassword()));
-
         userRepo.save(user);
     }
 }
