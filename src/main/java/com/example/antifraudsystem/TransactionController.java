@@ -1,10 +1,9 @@
 package com.example.antifraudsystem;
 
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -27,4 +26,15 @@ public class TransactionController {
             return new ResponseEntity<>(Map.of("result", "PROHIBITED"), HttpStatus.OK);
         }
     }
+
+    @GetMapping("/api/auth/list")
+    public void showAllUsers() {
+
+    }
+
+    @DeleteMapping("/api/auth/user/{username}")
+    public void deleteUser(@PathVariable("username") String username) {
+
+    }
+
 }
