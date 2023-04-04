@@ -1,5 +1,6 @@
 package com.example.antifraudsystem.controller;
 
+import com.example.antifraudsystem.dto.UserDto;
 import com.example.antifraudsystem.entity.User;
 import com.example.antifraudsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,17 @@ public class RegistrationController {
     }
 
     @PostMapping("/api/auth/user")
-    public ResponseEntity<?> register(@RequestBody User newUser) {
-
-        if (newUser.getName() == null || newUser.getUsername() == null || newUser.getPassword() == null) {
+    public ResponseEntity<?> register(@RequestBody UserDto userDto) {
+        if (userDto.getName() == null || userDto.getUsername() == null || userDto.getPassword() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        User newUser = new User(userDto.getName(), userDto.getUsername(), userDto.getPassword());
 
         Iterable<User> users = userRepo.findAll();
 
         for (User user : users) {
-            if (user.getUsername().equals(newUser.getUsername())) {
+            if (user.getUsername().equalsIgnoreCase(newUser.getUsername())) {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         }

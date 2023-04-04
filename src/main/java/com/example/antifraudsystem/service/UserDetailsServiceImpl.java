@@ -23,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Iterable<User> users = userRepository.findAll();
 
         for (User user : users) {
-            if (username.equals(user.getUsername())) {
+            if (username.equalsIgnoreCase(user.getUsername())) {
                 return new UserDetailsImpl(user);
             }
         }

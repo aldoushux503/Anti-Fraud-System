@@ -46,7 +46,7 @@ public class TransactionController {
         Iterable<User> users = userRepository.findAll();
 
         for (User user : users) {
-            res.add(new UserDto(user.getName(), user.getUsername()));
+            res.add(new UserDto(user.getName(), user.getUsername(), null));
         }
 
         return res;
@@ -57,7 +57,7 @@ public class TransactionController {
         Iterable<User> users = userRepository.findAll();
 
         for (User user : users) {
-            if (user.getUsername().equals(username)) {
+            if (user.getUsername().equalsIgnoreCase(username)) {
                 userRepository.delete(user);
                 Map<String, String> name = Map.of("username", user.getUsername());
                 Map<String, String> status = Map.of("status", "Deleted successfully!");
