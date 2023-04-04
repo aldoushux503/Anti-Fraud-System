@@ -1,5 +1,6 @@
 package com.example.antifraudsystem.config;
 
+import com.example.antifraudsystem.RestAuthenticationEntryPoint;
 import com.example.antifraudsystem.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,10 +21,12 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration {
 
     UserDetailsService userDetailsService;
+    RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Autowired
-    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService) {
+    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService, RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
         this.userDetailsService = userDetailsService;
+        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
     }
 
 
@@ -31,16 +34,21 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(HttpMethod.POST,"/api/auth/user").permitAll()
-                        .requestMatchers("/actuator/shutdown").permitAll()
-                        .requestMatchers("/api/auth/**").hasRole("USER")
+                        .requestMatchers("/actuator/shutdown").permitAll() // needs to run test
+                        .requestMatchers(HttpMethod.GET,"/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/**").permitAll()
                 )
                 .csrf().disable().headers().frameOptions().disable() // for Postman, the H2 console
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // no session
                 .and()
-                .httpBasic(withDefaults());
+                .authorizeHttpRequests() // manage access
+                .and()
+                .httpBasic()
+                .authenticationEntryPoint(restAuthenticationEntryPoint); // Handles auth error;
+
         return http.build();
     }
 
