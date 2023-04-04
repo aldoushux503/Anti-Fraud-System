@@ -3,7 +3,6 @@ package com.example.antifraudsystem.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-
 public class UserDto {
 
     private String name;
