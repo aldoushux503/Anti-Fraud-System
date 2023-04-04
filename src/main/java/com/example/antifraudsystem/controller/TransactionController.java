@@ -52,8 +52,19 @@ public class TransactionController {
     }
 
     @DeleteMapping("/api/auth/user/{username}")
-    public void deleteUser(@PathVariable("username") String username) {
+    public ResponseEntity<Object> deleteUser(@PathVariable("username") String username) {
+        Iterable<User> users = userRepository.findAll();
 
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                userRepository.delete(user);
+                Map<String, String> name = Map.of("username", user.getUsername());
+                Map<String, String> status = Map.of("status", "Deleted successfully!");
+                return new ResponseEntity<>(List.of(name, status), HttpStatus.OK);
+            }
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
