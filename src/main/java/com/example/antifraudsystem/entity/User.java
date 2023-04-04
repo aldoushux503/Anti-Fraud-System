@@ -25,7 +25,7 @@ public class User {
     private String username;
 
     @Column
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Имбла она прячет ввывод но можно надписывать
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @JsonIgnore

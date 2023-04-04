@@ -59,9 +59,11 @@ public class TransactionController {
         for (User user : users) {
             if (user.getUsername().equalsIgnoreCase(username)) {
                 userRepository.delete(user);
-                Map<String, String> name = Map.of("username", user.getUsername());
-                Map<String, String> status = Map.of("status", "Deleted successfully!");
-                return new ResponseEntity<>(List.of(name, status), HttpStatus.OK);
+                Map<String, String> res = Map.of(
+                        "username", user.getUsername(),
+                        "status", "Deleted successfully!"
+                );
+                return new ResponseEntity<>(res, HttpStatus.OK);
             }
         }
 
