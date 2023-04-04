@@ -41,12 +41,12 @@ public class TransactionController {
     }
 
     @GetMapping("/api/auth/list")
-    public List<UserDto> showAllUsers() {
-        List<UserDto> res = new ArrayList<>();
+    public List<User> showAllUsers() {
+        List<User> res = new ArrayList<>();
         Iterable<User> users = userRepository.findAll();
 
         for (User user : users) {
-            res.add(new UserDto(user.getName(), user.getUsername(), null));
+            res.add(user);
         }
 
         return res;
