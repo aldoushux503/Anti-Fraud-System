@@ -16,6 +16,7 @@ public class RegistrationController {
     UserRepository userRepo;
 
     PasswordEncoder encoder;
+
     @Autowired
     public RegistrationController(UserRepository userRepo, PasswordEncoder encoder) {
         this.userRepo = userRepo;
@@ -24,6 +25,11 @@ public class RegistrationController {
 
     @PostMapping("/api/auth/user")
     public ResponseEntity<?> register(@RequestBody User newUser) {
+
+        if (newUser.getName() == null || newUser.getUsername() == null || newUser.getPassword() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         Iterable<User> users = userRepo.findAll();
 
         for (User user : users) {

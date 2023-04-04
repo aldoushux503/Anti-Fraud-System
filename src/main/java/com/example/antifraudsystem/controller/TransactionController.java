@@ -53,7 +53,7 @@ public class TransactionController {
 
     @DeleteMapping("/api/auth/user/{username}")
     public void deleteUser(@PathVariable("username") String username) {
-        System.out.println("delete");
+
     }
 
 }
