@@ -1,11 +1,8 @@
-package com.example.antifraudsystem;
+package com.example.antifraudsystem.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.antifraudsystem.entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 @Component
 public interface UserRepository extends CrudRepository<User, Long> {

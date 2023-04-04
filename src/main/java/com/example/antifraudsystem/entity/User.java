@@ -1,6 +1,8 @@
-package com.example.antifraudsystem;
+package com.example.antifraudsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +22,7 @@ public class User {
     private String username;
 
     @Column
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Имбла она прячет ввывод но можно надписывать
     private String password;
 
     @JsonIgnore

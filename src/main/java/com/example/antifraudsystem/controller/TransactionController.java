@@ -1,8 +1,8 @@
-package com.example.antifraudsystem.controllers;
+package com.example.antifraudsystem.controller;
 
-import com.example.antifraudsystem.Transaction;
-import com.example.antifraudsystem.User;
-import com.example.antifraudsystem.UserRepository;
+import com.example.antifraudsystem.entity.Transaction;
+import com.example.antifraudsystem.entity.User;
+import com.example.antifraudsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

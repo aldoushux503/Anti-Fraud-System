@@ -1,4 +1,4 @@
-package com.example.antifraudsystem;
+package com.example.antifraudsystem.entity;
 
 public record Transaction(long amount) {
 }
