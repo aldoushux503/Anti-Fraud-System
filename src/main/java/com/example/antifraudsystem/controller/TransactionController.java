@@ -1,5 +1,6 @@
 package com.example.antifraudsystem.controller;
 
+import com.example.antifraudsystem.dto.UserDto;
 import com.example.antifraudsystem.entity.Transaction;
 import com.example.antifraudsystem.entity.User;
 import com.example.antifraudsystem.repository.UserRepository;
@@ -40,12 +41,12 @@ public class TransactionController {
     }
 
     @GetMapping("/api/auth/list")
-    public List<User> showAllUsers() {
-        List<User> res = new ArrayList<>();
+    public List<UserDto> showAllUsers() {
+        List<UserDto> res = new ArrayList<>();
         Iterable<User> users = userRepository.findAll();
 
         for (User user : users) {
-            res.add(user);
+            res.add(new UserDto(user.getName(), user.getUsername()));
         }
 
         return res;
