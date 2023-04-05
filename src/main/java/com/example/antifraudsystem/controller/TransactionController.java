@@ -39,35 +39,4 @@ public class TransactionController {
             return new ResponseEntity<>(Map.of("result", "PROHIBITED"), HttpStatus.OK);
         }
     }
-
-    @GetMapping("/api/auth/list")
-    public List<User> showAllUsers() {
-        List<User> res = new ArrayList<>();
-        Iterable<User> users = userRepository.findAll();
-
-        for (User user : users) {
-            res.add(user);
-        }
-
-        return res;
-    }
-
-    @DeleteMapping("/api/auth/user/{username}")
-    public ResponseEntity<Object> deleteUser(@PathVariable("username") String username) {
-        Iterable<User> users = userRepository.findAll();
-
-        for (User user : users) {
-            if (user.getUsername().equalsIgnoreCase(username)) {
-                userRepository.delete(user);
-                Map<String, String> res = Map.of(
-                        "username", user.getUsername(),
-                        "status", "Deleted successfully!"
-                );
-                return new ResponseEntity<>(res, HttpStatus.OK);
-            }
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
 }
