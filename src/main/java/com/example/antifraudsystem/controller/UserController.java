@@ -18,7 +18,7 @@ import java.util.Map;
 @RestController
 public class UserController {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserController(UserRepository userRepository) {

@@ -16,7 +16,7 @@ import java.util.Map;
 @RestController
 public class TransactionController {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public TransactionController(UserRepository userRepository) {

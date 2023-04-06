@@ -20,12 +20,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    UserDetailsService userDetailsService;
-    RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Autowired
-    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService, RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfiguration(RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
     }
 

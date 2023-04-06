@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RegistrationController {
 
-    UserRepository userRepo;
+    private final UserRepository userRepo;
 
-    PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
 
     @Autowired
     public RegistrationController(UserRepository userRepo, PasswordEncoder encoder) {
