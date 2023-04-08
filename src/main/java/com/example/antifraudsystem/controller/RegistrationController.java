@@ -1,8 +1,10 @@
 package com.example.antifraudsystem.controller;
 
+import com.example.antifraudsystem.entity.Role;
 import com.example.antifraudsystem.enums.UserRole;
 import com.example.antifraudsystem.dto.UserDto;
 import com.example.antifraudsystem.entity.User;
+import com.example.antifraudsystem.repository.RoleRepository;
 import com.example.antifraudsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegistrationController {
 
     private final UserRepository userRepo;
+    private final RoleRepository roleRepo;
 
     private final PasswordEncoder encoder;
 
     @Autowired
-    public RegistrationController(UserRepository userRepo, PasswordEncoder encoder) {
+    public RegistrationController(UserRepository userRepo, RoleRepository roleRepository, PasswordEncoder encoder) {
         this.userRepo = userRepo;
+        this.roleRepo = roleRepository;
         this.encoder = encoder;
     }
 
@@ -43,6 +47,13 @@ public class RegistrationController {
 
         newUser.setPassword(encoder.encode(newUser.getPassword()));
         userRepo.save(newUser);
+
+        Iterable<Role> roles =  roleRepo.findAll();
+        for (Role role : roles) {
+            System.out.println(role);
+        }
+
+
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 }
