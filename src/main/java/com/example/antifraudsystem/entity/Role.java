@@ -18,4 +18,9 @@ public class Role {
     public Role(String role) {
         this.name = role;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

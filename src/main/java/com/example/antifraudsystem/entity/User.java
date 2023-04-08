@@ -3,8 +3,10 @@ package com.example.antifraudsystem.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "users")
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -19,7 +21,7 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
@@ -28,10 +30,6 @@ public class User {
         this.username = username;
         this.password = password;
         this.role = new Role(role);
-    }
-
-    public User() {
-
     }
 
     public long getId() {
