@@ -1,6 +1,6 @@
 package com.example.antifraudsystem.controller;
 
-import com.example.antifraudsystem.UserRole;
+import com.example.antifraudsystem.enums.UserRole;
 import com.example.antifraudsystem.dto.UserDto;
 import com.example.antifraudsystem.entity.User;
 import com.example.antifraudsystem.repository.UserRepository;

@@ -1,6 +1,6 @@
 package com.example.antifraudsystem.controller;
 
-import com.example.antifraudsystem.TransactionStatus;
+import com.example.antifraudsystem.enums.TransactionStatus;
 import com.example.antifraudsystem.entity.Transaction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

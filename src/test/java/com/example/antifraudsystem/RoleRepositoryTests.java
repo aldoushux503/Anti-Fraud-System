@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 
 import com.example.antifraudsystem.entity.Role;
+import com.example.antifraudsystem.enums.UserRole;
 import com.example.antifraudsystem.repository.RoleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

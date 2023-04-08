@@ -1,7 +1,7 @@
 package com.example.antifraudsystem.entity;
 
 
-import com.example.antifraudsystem.UserRole;
+import com.example.antifraudsystem.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 

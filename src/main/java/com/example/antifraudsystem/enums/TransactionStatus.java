@@ -1,4 +1,4 @@
-package com.example.antifraudsystem;
+package com.example.antifraudsystem.enums;
 
 public enum TransactionStatus {
 

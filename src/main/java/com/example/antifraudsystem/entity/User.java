@@ -1,7 +1,6 @@
 package com.example.antifraudsystem.entity;
 
-import com.example.antifraudsystem.UserRole;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.antifraudsystem.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
