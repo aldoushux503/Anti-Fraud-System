@@ -1,6 +1,5 @@
 package com.example.antifraudsystem.entity;
 
-import com.example.antifraudsystem.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
@@ -25,11 +24,11 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    public User(String name, String username, String password, UserRole role) {
+    public User(String name, String username, String password, Role role) {
         this.name = name;
         this.username = username;
         this.password = password;
-        this.role = new Role(role);
+        this.role = role;
     }
 
     public long getId() {
@@ -64,8 +63,8 @@ public class User {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public String getRole() {
+        return role.toString();
     }
 
     public void setRole(Role role) {
