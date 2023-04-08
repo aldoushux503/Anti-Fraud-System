@@ -1,7 +1,9 @@
 package com.example.antifraudsystem.controller;
 
+import com.example.antifraudsystem.UserDetailsImpl;
 import com.example.antifraudsystem.entity.User;
 import com.example.antifraudsystem.repository.UserRepository;
+import com.example.antifraudsystem.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,38 +20,28 @@ import java.util.Map;
 @RestController
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserDetailsServiceImpl userService;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserDetailsServiceImpl userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/api/auth/list")
     public List<User> showAllUsers() {
-        List<User> res = new ArrayList<>();
-        Iterable<User> users = userRepository.findAll();
-
-        for (User user : users) {
-            res.add(user);
-        }
-
-        return res;
+        return userService.showAllUsers();
     }
 
     @DeleteMapping("/api/auth/user/{username}")
     public ResponseEntity<Object> deleteUser(@PathVariable("username") String username) {
-        Iterable<User> users = userRepository.findAll();
+        User deletedUser = userService.deleteUser(username);
 
-        for (User user : users) {
-            if (user.getUsername().equalsIgnoreCase(username)) {
-                userRepository.delete(user);
-                Map<String, String> res = Map.of(
-                        "username", user.getUsername(),
-                        "status", "Deleted successfully!"
-                );
-                return new ResponseEntity<>(res, HttpStatus.OK);
-            }
+        if (deletedUser != null) {
+            Map<String, String> res = Map.of(
+                    "username", deletedUser.getUsername(),
+                    "status", "Deleted successfully!"
+            );
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -33,7 +33,6 @@ public class RegistrationController {
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 }
