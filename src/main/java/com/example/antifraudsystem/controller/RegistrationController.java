@@ -30,7 +30,7 @@ public class RegistrationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        User newUser = new User(userDto.getName(), userDto.getUsername(), userDto.getPassword());
+        User newUser = new User(userDto.getName(), userDto.getUsername(), userDto.getPassword(), "Admin");
 
         Iterable<User> users = userRepo.findAll();
 

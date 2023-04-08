@@ -4,17 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
-@Entity(name = "user")
+@Entity(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     @Column
     private String name;
-
-
     @Column
     private String username;
 
@@ -22,14 +19,15 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @JsonIgnore
-    private String role;
+    @OneToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
-    public User(String name, String username, String password) {
+    public User(String name, String username, String password, String role) {
         this.name = name;
         this.username = username;
         this.password = password;
-        this.role = "USER";
+        this.role = new Role(role);
     }
 
     public User() {
@@ -69,10 +67,10 @@ public class User {
     }
 
     public String getRole() {
-        return role;
+        return role.toString();
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }
