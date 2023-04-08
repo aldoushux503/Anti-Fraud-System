@@ -26,6 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final RoleRepository roleRepository;
 
     private final PasswordEncoder encoder;
+
     @Autowired
     public UserDetailsServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder) {
         this.userRepository = userRepository;
@@ -46,15 +47,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public User createNewUser(UserDto userDto) {
-        Iterable<User> users = userRepository.findAll();
+        User user = userRepository.findByUsername(userDto.getUsername());
 
-        for (User user : users) {
-            if (user.getUsername().equalsIgnoreCase(userDto.getUsername())) {
-                return null;
-            }
+        // Check for existing users
+        if (user != null) {
+            return null;
         }
 
-        Role role = roleRepository.findByName(UserRole.ADMINISTRATOR);
+        // The first registered user should receive the ADMINISTRATOR role; the rest — MERCHANT.
+        UserRole roleName = UserRole.ADMINISTRATOR;
+        if (userRepository.count() != 0) {
+            roleName = UserRole.MERCHANT;
+        }
+        Role role = roleRepository.findByName(roleName);
+
         User newUser = new User(userDto.getName(), userDto.getUsername(), userDto.getPassword(), role);
         newUser.setPassword(encoder.encode(newUser.getPassword()));
         userRepository.save(newUser);
