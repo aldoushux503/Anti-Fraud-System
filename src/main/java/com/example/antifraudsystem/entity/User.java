@@ -1,5 +1,6 @@
 package com.example.antifraudsystem.entity;
 
+import com.example.antifraudsystem.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -25,7 +26,7 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    public User(String name, String username, String password, String role) {
+    public User(String name, String username, String password, UserRole role) {
         this.name = name;
         this.username = username;
         this.password = password;

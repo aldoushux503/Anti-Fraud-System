@@ -1,5 +1,6 @@
 package com.example.antifraudsystem.controller;
 
+import com.example.antifraudsystem.UserRole;
 import com.example.antifraudsystem.dto.UserDto;
 import com.example.antifraudsystem.entity.User;
 import com.example.antifraudsystem.repository.UserRepository;
@@ -30,7 +31,7 @@ public class RegistrationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        User newUser = new User(userDto.getName(), userDto.getUsername(), userDto.getPassword(), "Admin");
+        User newUser = new User(userDto.getName(), userDto.getUsername(), userDto.getPassword(), UserRole.ADMINISTRATOR);
 
         Iterable<User> users = userRepo.findAll();
 

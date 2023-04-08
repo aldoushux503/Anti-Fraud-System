@@ -1,6 +1,7 @@
 package com.example.antifraudsystem.entity;
 
 
+import com.example.antifraudsystem.UserRole;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
@@ -12,15 +13,16 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Enumerated(EnumType.STRING)
     @Column
-    private String name;
+    private UserRole name;
 
-    public Role(String role) {
+    public Role(UserRole role) {
         this.name = role;
     }
 
     @Override
     public String toString() {
-        return name;
+        return name.toString();
     }
 }
