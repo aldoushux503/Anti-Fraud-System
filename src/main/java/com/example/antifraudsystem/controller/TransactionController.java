@@ -1,26 +1,18 @@
 package com.example.antifraudsystem.controller;
 
-import com.example.antifraudsystem.dto.UserDto;
+import com.example.antifraudsystem.TransactionStatus;
 import com.example.antifraudsystem.entity.Transaction;
-import com.example.antifraudsystem.entity.User;
-import com.example.antifraudsystem.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 public class TransactionController {
 
-    private final UserRepository userRepository;
+    public TransactionController() {
 
-    @Autowired
-    public TransactionController(UserRepository userRepository) {
-        this.userRepository = userRepository;
     }
 
     @PostMapping("/api/antifraud/transaction")
@@ -32,11 +24,11 @@ public class TransactionController {
         }
 
         if (amount <= 200) {
-            return new ResponseEntity<>(Map.of("result", "ALLOWED"), HttpStatus.OK);
+            return new ResponseEntity<>(Map.of("result", TransactionStatus.ALLOWED), HttpStatus.OK);
         } else if (amount <= 1500) {
-            return new ResponseEntity<>(Map.of("result", "MANUAL_PROCESSING"), HttpStatus.OK);
+            return new ResponseEntity<>(Map.of("result", TransactionStatus.MANUAL_PROCESSING), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(Map.of("result", "PROHIBITED"), HttpStatus.OK);
+            return new ResponseEntity<>(Map.of("result", TransactionStatus.PROHIBITED), HttpStatus.OK);
         }
     }
 }
