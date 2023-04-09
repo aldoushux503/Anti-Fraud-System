@@ -44,7 +44,12 @@ public class UserController {
 
 
     @PutMapping("/api/auth/role")
-    public void changeUserRole(@RequestBody UserRoleDto userRole) {
-
+    public ResponseEntity<?> changeUserRole(@RequestBody UserRoleDto userRoleDto) {
+        return userService.changeUserRole(userRoleDto);
     }
+
+//    @PutMapping("/api/auth/access")
+//    public ResponseEntity<?> changeLockStatus(@RequestBody UserLockDto userRoleDto) {
+//        return userService.changeUserRole(userRoleDto);
+//    }
 }

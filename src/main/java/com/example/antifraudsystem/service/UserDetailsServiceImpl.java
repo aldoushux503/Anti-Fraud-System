@@ -2,6 +2,7 @@ package com.example.antifraudsystem.service;
 
 import com.example.antifraudsystem.UserDetailsImpl;
 import com.example.antifraudsystem.dto.UserDto;
+import com.example.antifraudsystem.dto.UserRoleDto;
 import com.example.antifraudsystem.entity.Role;
 import com.example.antifraudsystem.entity.User;
 import com.example.antifraudsystem.enums.UserRole;
@@ -91,5 +92,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         return null;
+    }
+
+    public ResponseEntity<?> changeUserRole(UserRoleDto userRoleDto) {
+        User user = userRepository.findByUsername(userRoleDto.username());
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if (!Objects.equals(userRoleDto.role(), UserRole.MERCHANT.name())
+                && !Objects.equals(userRoleDto.role(), UserRole.SUPPORT.name())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else if (Objects.equals(user.getRole(), userRoleDto.role())) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        Role role = roleRepository.findByName(UserRole.valueOf(userRoleDto.role()));
+        user.setRole(role);
+        userRepository.save(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }
