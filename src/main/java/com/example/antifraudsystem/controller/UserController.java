@@ -1,5 +1,6 @@
 package com.example.antifraudsystem.controller;
 
+import com.example.antifraudsystem.dto.UserLockDto;
 import com.example.antifraudsystem.dto.UserRoleDto;
 import com.example.antifraudsystem.entity.User;
 import com.example.antifraudsystem.enums.UserRole;
@@ -48,8 +49,8 @@ public class UserController {
         return userService.changeUserRole(userRoleDto);
     }
 
-//    @PutMapping("/api/auth/access")
-//    public ResponseEntity<?> changeLockStatus(@RequestBody UserLockDto userRoleDto) {
-//        return userService.changeUserRole(userRoleDto);
-//    }
+    @PutMapping("/api/auth/access")
+    public ResponseEntity<?> changeLockStatus(@RequestBody UserLockDto userLockDto) {
+        return null;
+    }
 }
