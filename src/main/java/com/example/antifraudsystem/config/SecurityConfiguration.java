@@ -32,10 +32,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authz ->
                         authz
                                 .requestMatchers("/actuator/shutdown").permitAll() // needs to run test
-                                .requestMatchers(HttpMethod.POST, "/api/auth/user").permitAll()
+                                .requestMatchers("/api/auth/user").permitAll()
+                                .requestMatchers("/api/antifraud/transaction").hasRole(UserRole.MERCHANT.name())
                                 .requestMatchers("/api/auth/user/*", "/api/auth/access","/api/auth/role").hasAnyRole(UserRole.ADMINISTRATOR.name())
                                 .requestMatchers("/api/auth/list").hasAnyRole(UserRole.ADMINISTRATOR.name(), UserRole.SUPPORT.name())
-                                .requestMatchers(HttpMethod.POST, "/api/antifraud/transaction").hasRole(UserRole.MERCHANT.name())
+
                 )
                 .csrf().disable().headers().frameOptions().disable() // for Postman, the H2 console
                 .and()

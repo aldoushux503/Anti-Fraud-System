@@ -1,6 +1,5 @@
 package com.example.antifraudsystem.entity;
 
-import com.example.antifraudsystem.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -8,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Objects;
 
 @Entity(name = "users")
 @NoArgsConstructor
@@ -44,6 +41,14 @@ public class User {
         this.name = name;
         this.username = username;
         this.password = password;
+        this.role = role;
+    }
+
+    public String getRole() {
+        return role.toString();
+    }
+
+    public void setRole(Role role) {
         this.role = role;
     }
 }

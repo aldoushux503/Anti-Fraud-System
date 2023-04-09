@@ -71,8 +71,10 @@ public class AuthService {
 
 
     public ResponseEntity<?> deleteUser(String username) {
-        if (userRepository.existsByUsernameIgnoreCase(username)) {
-            userRepository.deleteByUsernameIgnoreCase(username);
+        Optional<User> u = userRepository.findUserByUsernameIgnoreCase(username);
+
+        if (u.isPresent()) {
+            userRepository.delete(u.get());
             LOGGER.error("User deleting");
             return new ResponseEntity<>(Map.of("username", username,
                     "status", "Deleted successfully!"), HttpStatus.OK);
@@ -83,7 +85,7 @@ public class AuthService {
 
     public ResponseEntity<?> changeUserRole(UserRoleDto userRoleDto) {
         Optional<User> u = userRepository.findUserByUsernameIgnoreCase(userRoleDto.username());
-        if (u.isPresent()) {
+        if (u.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -107,7 +109,7 @@ public class AuthService {
     public ResponseEntity<?> changeLockStatus(UserLockDto userLockDto) {
         Optional<User> u = userRepository.findUserByUsernameIgnoreCase(userLockDto.username());
 
-        if (u.isPresent()) {
+        if (u.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -120,9 +122,9 @@ public class AuthService {
         boolean status = !Objects.equals(userLockDto.operation(), ActivityOperation.LOCK);
         user.setAccountNonLocked(status);
         userRepository.save(user);
-        String res = String.format("User %s %s!", userLockDto.username(), userLockDto.operation().toString().toLowerCase());
+        String res = String.format("User %s %sed!", userLockDto.username(), userLockDto.operation().toString().toLowerCase());
 
-        return new ResponseEntity<>(res, HttpStatus.OK);
+        return new ResponseEntity<>(Map.of("status", res), HttpStatus.OK);
     }
 
 }
