@@ -3,8 +3,7 @@ package com.example.antifraudsystem.controller;
 import com.example.antifraudsystem.dto.UserLockDto;
 import com.example.antifraudsystem.dto.UserRoleDto;
 import com.example.antifraudsystem.entity.User;
-import com.example.antifraudsystem.enums.UserRole;
-import com.example.antifraudsystem.service.UserDetailsServiceImpl;
+import com.example.antifraudsystem.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,21 +16,21 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class UserController {
 
-    private final UserDetailsServiceImpl userService;
+    private final AuthService authService;
 
     @Autowired
-    public UserController(UserDetailsServiceImpl userService) {
-        this.userService = userService;
+    public UserController(AuthService authService) {
+        this.authService = authService;
     }
 
     @GetMapping("/list")
     public List<User> showAllUsers() {
-        return userService.showAllUsers();
+        return authService.showAllUsers();
     }
 
     @DeleteMapping("user/{username}")
     public ResponseEntity<?> deleteUser(@PathVariable("username") String username) {
-        User deletedUser = userService.deleteUser(username);
+        User deletedUser = authService.deleteUser(username);
 
         if (deletedUser != null) {
             Map<String, String> res = Map.of(
@@ -47,11 +46,11 @@ public class UserController {
 
     @PutMapping("/role")
     public ResponseEntity<?> changeUserRole(@RequestBody UserRoleDto userRoleDto) {
-        return userService.changeUserRole(userRoleDto);
+        return authService.changeUserRole(userRoleDto);
     }
 
     @PutMapping("/access")
     public ResponseEntity<?> changeLockStatus(@RequestBody UserLockDto userLockDto) {
-        return userService.changeLockStatus(userLockDto);
+        return authService.changeLockStatus(userLockDto);
     }
 }
