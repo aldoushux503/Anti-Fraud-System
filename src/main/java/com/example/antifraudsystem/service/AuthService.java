@@ -18,9 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -30,7 +31,7 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
 
-    Logger logger = LoggerFactory.getLogger(RegistrationController.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired
     public AuthService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder) {
@@ -40,8 +41,8 @@ public class AuthService {
     }
 
     public ResponseEntity<?> createNewUser(User user) {
-        if(userRepository.existsByUsernameIgnoreCase(user.getUsername())) {
-            logger.error("User already exists! {}", user);
+        if (userRepository.existsByUsernameIgnoreCase(user.getUsername())) {
+            LOGGER.error("User already exists! {}", user);
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
@@ -49,7 +50,7 @@ public class AuthService {
         user.setPassword(encoder.encode(user.getPassword()));
 
         // The first registered user should receive the ADMINISTRATOR role; the rest — MERCHANT.
-        if(userRepository.count()==0) {
+        if (userRepository.count() == 0) {
             role = roleRepository.findByName(UserRole.ADMINISTRATOR);
             user.setRole(role);
             user.setAccountNonLocked(true);
@@ -59,7 +60,7 @@ public class AuthService {
             user.setAccountNonLocked(false);
         }
 
-        logger.info("Saving user: {}", user);
+        LOGGER.info("Saving user: {}", user);
         userRepository.save(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
@@ -69,25 +70,31 @@ public class AuthService {
     }
 
 
-    public User deleteUser(String username) {
-        User user = userRepository.findByUsername(username);
-
-        if (user != null) {
-            userRepository.delete(user);
-            return user;
+    public ResponseEntity<?> deleteUser(String username) {
+        if (userRepository.existsByUsernameIgnoreCase(username)) {
+            userRepository.deleteByUsernameIgnoreCase(username);
+            LOGGER.error("User deleting");
+            return new ResponseEntity<>(Map.of("username", username,
+                    "status", "Deleted successfully!"), HttpStatus.OK);
         }
-
-        return null;
+        LOGGER.error("User not found");
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     public ResponseEntity<?> changeUserRole(UserRoleDto userRoleDto) {
-        User user = userRepository.findByUsername(userRoleDto.username());
-        if (user == null) {
+        Optional<User> u = userRepository.findUserByUsernameIgnoreCase(userRoleDto.username());
+        if (u.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if (!Objects.equals(userRoleDto.role(), UserRole.MERCHANT.name())
+        }
+
+        User user = u.get();
+
+         if (!Objects.equals(userRoleDto.role(), UserRole.MERCHANT.name())
                 && !Objects.equals(userRoleDto.role(), UserRole.SUPPORT.name())) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else if (Objects.equals(user.getRole(), userRoleDto.role())) {
+             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+         }
+
+        if (Objects.equals(user.getRole().toString(), userRoleDto.role())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
@@ -98,15 +105,19 @@ public class AuthService {
     }
 
     public ResponseEntity<?> changeLockStatus(UserLockDto userLockDto) {
-        User user = userRepository.findByUsername(userLockDto.username());
-        boolean status = !Objects.equals(userLockDto.operation(), ActivityOperation.LOCK);
+        Optional<User> u = userRepository.findUserByUsernameIgnoreCase(userLockDto.username());
 
-        if (user == null) {
+        if (u.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if (Objects.equals(user.getRole(), UserRole.ADMINISTRATOR.name()) ) {
+        }
+
+        User user = u.get();
+
+        if (Objects.equals(user.getRole().toString(), UserRole.ADMINISTRATOR.name())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        boolean status = !Objects.equals(userLockDto.operation(), ActivityOperation.LOCK);
         user.setAccountNonLocked(status);
         userRepository.save(user);
         String res = String.format("User %s %s!", userLockDto.username(), userLockDto.operation().toString().toLowerCase());

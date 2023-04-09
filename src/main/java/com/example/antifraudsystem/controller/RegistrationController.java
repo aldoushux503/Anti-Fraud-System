@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegistrationController {
 
     private final AuthService authService;
-    Logger logger = LoggerFactory.getLogger(RegistrationController.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
 
     @Autowired
     public RegistrationController(AuthService authService) {
@@ -28,7 +28,7 @@ public class RegistrationController {
 
     @PostMapping("/user")
     public ResponseEntity<?> register(@RequestBody @Valid User user) {
-        logger.info("Registering user: {}", user);
+        LOGGER.info("Registering user: {}", user);
         return authService.createNewUser(user);
     }
 }
