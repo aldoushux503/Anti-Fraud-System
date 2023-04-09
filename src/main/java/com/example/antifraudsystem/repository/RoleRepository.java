@@ -8,4 +8,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
     Role findByName(UserRole name);
+
+    boolean isRoleExistsByName(UserRole name);
 }

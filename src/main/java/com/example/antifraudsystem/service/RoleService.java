@@ -21,10 +21,14 @@ public class RoleService {
 
     @Bean
     public void addAllRoles() {
-        Role admin = new Role(UserRole.ADMINISTRATOR);
-        Role support = new Role(UserRole.SUPPORT);
-        Role merchant = new Role(UserRole.MERCHANT);
+        if (!roleRepository.isRoleExistsByName(UserRole.ADMINISTRATOR)
+                || !roleRepository.isRoleExistsByName(UserRole.MERCHANT)
+                || !roleRepository.isRoleExistsByName(UserRole.SUPPORT)) {
+            Role admin = new Role(UserRole.ADMINISTRATOR);
+            Role support = new Role(UserRole.MERCHANT);
+            Role merchant = new Role(UserRole.SUPPORT);
 
-        roleRepository.saveAll(List.of(admin, support, merchant));
+            roleRepository.saveAll(List.of(admin, support, merchant));
+        }
     }
 }
