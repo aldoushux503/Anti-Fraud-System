@@ -1,6 +1,7 @@
 package com.example.antifraudsystem.config;
 
 import com.example.antifraudsystem.RestAuthenticationEntryPoint;
+import com.example.antifraudsystem.enums.UserRole;
 import com.example.antifraudsystem.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,12 +32,15 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/actuator/shutdown").permitAll() // needs to run test
-                        .requestMatchers(HttpMethod.GET,"/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE,"/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/**").permitAll()
+                .authorizeHttpRequests(authz ->
+                        authz
+                                .requestMatchers("/actuator/shutdown").permitAll() // needs to run test
+                                .requestMatchers(HttpMethod.POST, "/api/auth/user").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/auth/list").hasAnyRole(UserRole.ADMINISTRATOR.name(), UserRole.SUPPORT.name())
+                                .requestMatchers(HttpMethod.POST, "/api/antifraud/transaction").hasRole(UserRole.MERCHANT.name())
+                                .requestMatchers(HttpMethod.DELETE, "/api/auth/user/*").hasRole(UserRole.ADMINISTRATOR.name())
+                                .requestMatchers(HttpMethod.PUT, "/api/auth/access").hasRole(UserRole.ADMINISTRATOR.name())
+                                .requestMatchers(HttpMethod.PUT, "/api/auth/role").hasRole(UserRole.ADMINISTRATOR.name())
                 )
                 .csrf().disable().headers().frameOptions().disable() // for Postman, the H2 console
                 .and()

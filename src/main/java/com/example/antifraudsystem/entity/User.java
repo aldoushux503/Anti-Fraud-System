@@ -85,6 +85,7 @@ public class User {
     public void setAccountNonLocked(boolean nonLocked) {
         // Administrator cannot be lock
         if (Objects.equals(this.getRole(), UserRole.ADMINISTRATOR.name())) {
+            accountNonLocked = true;
             return;
         }
         accountNonLocked = nonLocked;
