@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/antifraud")
 public class TransactionController {
 
     public TransactionController() {
 
     }
 
-    @PostMapping("/api/antifraud/transaction")
+    @PostMapping("/transaction")
     public ResponseEntity<?> validateAmount(@RequestBody Transaction transaction) {
         long amount = transaction.amount();
 

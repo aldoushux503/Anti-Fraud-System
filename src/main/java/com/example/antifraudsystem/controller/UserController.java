@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/auth")
 public class UserController {
 
     private final UserDetailsServiceImpl userService;
@@ -23,12 +24,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/api/auth/list")
+    @GetMapping("/list")
     public List<User> showAllUsers() {
         return userService.showAllUsers();
     }
 
-    @DeleteMapping("/api/auth/user/{username}")
+    @DeleteMapping("user/{username}")
     public ResponseEntity<?> deleteUser(@PathVariable("username") String username) {
         User deletedUser = userService.deleteUser(username);
 
@@ -44,12 +45,12 @@ public class UserController {
     }
 
 
-    @PutMapping("/api/auth/role")
+    @PutMapping("/role")
     public ResponseEntity<?> changeUserRole(@RequestBody UserRoleDto userRoleDto) {
         return userService.changeUserRole(userRoleDto);
     }
 
-    @PutMapping("/api/auth/access")
+    @PutMapping("/access")
     public ResponseEntity<?> changeLockStatus(@RequestBody UserLockDto userLockDto) {
         return userService.changeLockStatus(userLockDto);
     }
