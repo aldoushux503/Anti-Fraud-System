@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.List;
 
 public class UserDetailsImpl implements UserDetails {
+
+    User user;
     private final String ROLE_PREFIX = "ROLE_";
     private final String username;
     private final String password;
@@ -16,6 +18,7 @@ public class UserDetailsImpl implements UserDetails {
 
 
     public UserDetailsImpl(User user) {
+        this.user = user;
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.rolesAndAuthorities = List.of(new SimpleGrantedAuthority( ROLE_PREFIX + user.getRole()));
@@ -43,7 +46,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return user.isAccountNonLocked();
     }
 
     @Override

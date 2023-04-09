@@ -24,6 +24,9 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private boolean accountNonLocked;
+
     public User(String name, String username, String password, Role role) {
         this.name = name;
         this.username = username;
@@ -69,5 +72,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
     }
 }
