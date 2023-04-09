@@ -3,24 +3,33 @@ package com.example.antifraudsystem.entity;
 import com.example.antifraudsystem.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Objects;
 
 @Entity(name = "users")
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter @Setter
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column
+    @NotBlank
     private String name;
     @Column
+    @NotBlank
     private String username;
 
     @Column
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotBlank
     private String password;
 
     @ManyToOne
@@ -36,58 +45,5 @@ public class User {
         this.username = username;
         this.password = password;
         this.role = role;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role.toString();
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public boolean isAccountNonLocked() {
-        return accountNonLocked;
-    }
-
-    public void setAccountNonLocked(boolean nonLocked) {
-        // Administrator cannot be lock
-        if (Objects.equals(this.getRole(), UserRole.ADMINISTRATOR.name())) {
-            accountNonLocked = true;
-            return;
-        }
-        accountNonLocked = nonLocked;
     }
 }

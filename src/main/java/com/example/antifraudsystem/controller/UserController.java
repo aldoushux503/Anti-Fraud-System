@@ -25,7 +25,7 @@ public class UserController {
 
     @GetMapping("/list")
     public List<User> showAllUsers() {
-        return authService.showAllUsers();
+        return authService.getAllUsers();
     }
 
     @DeleteMapping("user/{username}")
