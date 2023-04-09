@@ -1,5 +1,6 @@
 package com.example.antifraudsystem.entity;
 
+import com.example.antifraudsystem.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    @Column
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean accountNonLocked;
 
@@ -78,7 +80,8 @@ public class User {
         return accountNonLocked;
     }
 
-    public void setAccountNonLocked(boolean accountNonLocked) {
-        this.accountNonLocked = accountNonLocked;
+    public void setAccountNonLocked() {
+        // Administrator cannot be lock
+        accountNonLocked = this.getRole().equals(UserRole.ADMINISTRATOR.toString());
     }
 }

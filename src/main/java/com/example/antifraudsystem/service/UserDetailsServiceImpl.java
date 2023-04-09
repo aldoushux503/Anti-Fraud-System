@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -63,6 +64,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         User newUser = new User(userDto.getName(), userDto.getUsername(), userDto.getPassword(), role);
         newUser.setPassword(encoder.encode(newUser.getPassword()));
+        newUser.setAccountNonLocked();
         userRepository.save(newUser);
 
         return newUser;

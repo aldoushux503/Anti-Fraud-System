@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET,"/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE,"/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/**").permitAll()
                 )
                 .csrf().disable().headers().frameOptions().disable() // for Postman, the H2 console
                 .and()
