@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Entity(name = "users")
 @NoArgsConstructor
 public class User {
@@ -80,8 +82,11 @@ public class User {
         return accountNonLocked;
     }
 
-    public void setAccountNonLocked() {
+    public void setAccountNonLocked(boolean nonLocked) {
         // Administrator cannot be lock
-        accountNonLocked = this.getRole().equals(UserRole.ADMINISTRATOR.toString());
+        if (Objects.equals(this.getRole(), UserRole.ADMINISTRATOR.name())) {
+            return;
+        }
+        accountNonLocked = nonLocked;
     }
 }

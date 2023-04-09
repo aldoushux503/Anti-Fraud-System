@@ -2,9 +2,11 @@ package com.example.antifraudsystem.service;
 
 import com.example.antifraudsystem.UserDetailsImpl;
 import com.example.antifraudsystem.dto.UserDto;
+import com.example.antifraudsystem.dto.UserLockDto;
 import com.example.antifraudsystem.dto.UserRoleDto;
 import com.example.antifraudsystem.entity.Role;
 import com.example.antifraudsystem.entity.User;
+import com.example.antifraudsystem.enums.ActivityOperation;
 import com.example.antifraudsystem.enums.UserRole;
 import com.example.antifraudsystem.repository.RoleRepository;
 import com.example.antifraudsystem.repository.UserRepository;
@@ -65,7 +67,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         User newUser = new User(userDto.getName(), userDto.getUsername(), userDto.getPassword(), role);
         newUser.setPassword(encoder.encode(newUser.getPassword()));
-        newUser.setAccountNonLocked();
+        newUser.setAccountNonLocked(false);
         userRepository.save(newUser);
 
         return newUser;
@@ -110,4 +112,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userRepository.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
+    public ResponseEntity<?> changeLockStatus(UserLockDto userLockDto) {
+        User user = userRepository.findByUsername(userLockDto.username());
+        boolean status = !Objects.equals(userLockDto.operation(), ActivityOperation.LOCK);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if (Objects.equals(user.getRole(), UserRole.ADMINISTRATOR.name()) ) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        user.setAccountNonLocked(status);
+        userRepository.save(user);
+        String res = String.format("User %s %s!", userLockDto.username(), userLockDto.operation().toString().toLowerCase());
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
 }

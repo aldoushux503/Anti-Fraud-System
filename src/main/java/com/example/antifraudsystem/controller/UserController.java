@@ -51,6 +51,6 @@ public class UserController {
 
     @PutMapping("/api/auth/access")
     public ResponseEntity<?> changeLockStatus(@RequestBody UserLockDto userLockDto) {
-        return null;
+        return userService.changeLockStatus(userLockDto);
     }
 }
