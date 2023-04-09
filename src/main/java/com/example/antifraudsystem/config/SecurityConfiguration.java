@@ -36,11 +36,9 @@ public class SecurityConfiguration {
                         authz
                                 .requestMatchers("/actuator/shutdown").permitAll() // needs to run test
                                 .requestMatchers(HttpMethod.POST, "/api/auth/user").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/auth/list").hasAnyRole(UserRole.ADMINISTRATOR.name(), UserRole.SUPPORT.name())
+                                .requestMatchers("/api/auth/user/*", "/api/auth/access","/api/auth/role").hasAnyRole(UserRole.ADMINISTRATOR.name())
+                                .requestMatchers("/api/auth/list").hasAnyRole(UserRole.ADMINISTRATOR.name(), UserRole.SUPPORT.name())
                                 .requestMatchers(HttpMethod.POST, "/api/antifraud/transaction").hasRole(UserRole.MERCHANT.name())
-                                .requestMatchers(HttpMethod.DELETE, "/api/auth/user/*").hasRole(UserRole.ADMINISTRATOR.name())
-                                .requestMatchers(HttpMethod.PUT, "/api/auth/access").hasRole(UserRole.ADMINISTRATOR.name())
-                                .requestMatchers(HttpMethod.PUT, "/api/auth/role").hasRole(UserRole.ADMINISTRATOR.name())
                 )
                 .csrf().disable().headers().frameOptions().disable() // for Postman, the H2 console
                 .and()

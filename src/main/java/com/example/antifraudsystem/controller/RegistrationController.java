@@ -28,6 +28,10 @@ public class RegistrationController {
 
     @PostMapping("/api/auth/user")
     public ResponseEntity<?> register(@RequestBody @Valid UserDto userDto) {
+        if (userDto.getName() == null || userDto.getUsername() == null || userDto.getPassword() == null) {
+            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         User user = userService.createNewUser(userDto);
 
         if (user == null) {
