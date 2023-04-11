@@ -26,12 +26,11 @@ import java.util.Optional;
 @Service
 public class AuthService {
 
-
+    private final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
 
-    private final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired
     public AuthService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder) {

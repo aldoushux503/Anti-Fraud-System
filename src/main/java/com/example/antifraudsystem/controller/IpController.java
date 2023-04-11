@@ -2,7 +2,8 @@ package com.example.antifraudsystem.controller;
 
 import com.example.antifraudsystem.entity.Ip;
 import com.example.antifraudsystem.service.IpService;
-import org.apache.coyote.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/antifraud")
 public class IpController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(IpController.class);
     IpService ipService;
+
 
     @Autowired
     public IpController(IpService ipService) {
@@ -23,6 +26,7 @@ public class IpController {
 
     @PostMapping("/suspicious-ip")
     public ResponseEntity<?> addSuspiciousIp(@RequestBody Ip ip) {
+        LOGGER.info("Adding ip address to suspicious {}", ip.getAddress());
         return ipService.addSuspiciousIpToDataBase(ip);
     }
 }

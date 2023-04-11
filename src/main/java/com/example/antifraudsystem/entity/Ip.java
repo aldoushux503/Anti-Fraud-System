@@ -1,22 +1,24 @@
 package com.example.antifraudsystem.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Entity(name = "ip_addresses")
+@Entity(name = "ips")
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter @Setter
 public class Ip {
 
     @Id
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Column
-    private String value;
+    @JsonProperty(value = "ip")
+    private String address;
 }

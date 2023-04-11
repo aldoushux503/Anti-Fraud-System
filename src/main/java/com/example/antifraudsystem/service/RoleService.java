@@ -21,9 +21,9 @@ public class RoleService {
 
     @Bean
     public void addAllRoles() {
-        if (!roleRepository.isRoleExistsByName(UserRole.ADMINISTRATOR)
-                || !roleRepository.isRoleExistsByName(UserRole.MERCHANT)
-                || !roleRepository.isRoleExistsByName(UserRole.SUPPORT)) {
+        if (!roleRepository.existsByName(UserRole.ADMINISTRATOR)
+                || !roleRepository.existsByName(UserRole.MERCHANT)
+                || !roleRepository.existsByName(UserRole.SUPPORT)) {
             Role admin = new Role(UserRole.ADMINISTRATOR);
             Role support = new Role(UserRole.MERCHANT);
             Role merchant = new Role(UserRole.SUPPORT);
