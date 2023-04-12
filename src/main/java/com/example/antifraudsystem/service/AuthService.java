@@ -74,7 +74,7 @@ public class AuthService {
 
         if (u.isPresent()) {
             userRepository.delete(u.get());
-            LOGGER.error("User deleting");
+            LOGGER.info("User deleting {}", u);
             return new ResponseEntity<>(Map.of("username", username,
                     "status", "Deleted successfully!"), HttpStatus.OK);
         }
@@ -103,7 +103,7 @@ public class AuthService {
         }
 
         Role role = roleRepository.findByName(UserRole.valueOf(userRoleDto.role()));
-        LOGGER.error("Changing User role... {}", u);
+        LOGGER.info("Changing User role... {}", u);
         user.setRole(role);
         userRepository.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -125,7 +125,8 @@ public class AuthService {
         }
 
         boolean status = !Objects.equals(userLockDto.operation(), ActivityOperation.LOCK);
-        LOGGER.error("Changing lock status... {}", u);
+
+        LOGGER.info("Changing lock status... {}", u);
         user.setAccountNonLocked(status);
         userRepository.save(user);
         String res = String.format("User %s %sed!", userLockDto.username(), userLockDto.operation().toString().toLowerCase());

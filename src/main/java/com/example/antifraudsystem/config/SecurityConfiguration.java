@@ -33,7 +33,7 @@ public class SecurityConfiguration {
                         authz
                                 .requestMatchers("/actuator/shutdown").permitAll() // needs to run test
                                 .requestMatchers("/api/auth/user").permitAll()
-                                .requestMatchers("/api/antifraud/suspicious-ip").permitAll()
+                                .requestMatchers("/api/antifraud/suspicious-ip/**").permitAll()
                                 .requestMatchers("/api/antifraud/transaction").hasRole(UserRole.MERCHANT.name())
                                 .requestMatchers("/api/auth/user/*", "/api/auth/access","/api/auth/role").hasAnyRole(UserRole.ADMINISTRATOR.name())
                                 .requestMatchers("/api/auth/list").hasAnyRole(UserRole.ADMINISTRATOR.name(), UserRole.SUPPORT.name())
