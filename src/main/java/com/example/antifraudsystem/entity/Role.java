@@ -3,15 +3,18 @@ package com.example.antifraudsystem.entity;
 
 import com.example.antifraudsystem.enums.UserRole;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-@Entity(name = "roles")
+@Getter @Setter
 @NoArgsConstructor
+@Entity(name = "roles")
 public class Role {
 
     @Id
