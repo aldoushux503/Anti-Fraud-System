@@ -125,7 +125,6 @@ public class AuthService {
         }
 
         boolean status = !Objects.equals(userLockDto.operation(), ActivityOperation.LOCK);
-
         LOGGER.info("Changing lock status... {}", u);
         user.setAccountNonLocked(status);
         userRepository.save(user);

@@ -5,6 +5,7 @@ import com.example.antifraudsystem.service.IpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,5 +32,10 @@ public class IpController {
     public ResponseEntity<?> deleteSuspiciousIp(@PathVariable String ip) {
         LOGGER.info("Deleting IP address from suspicious {}", ip);
         return ipService.deleteSuspiciousIpFromDataBase(ip);
+    }
+
+    @GetMapping("/suspicious-ip")
+    public ResponseEntity<?> showAllSuspiciousIp() {
+        return new ResponseEntity<>(ipService.getAllSuspiciousIp(), HttpStatus.OK);
     }
 }
