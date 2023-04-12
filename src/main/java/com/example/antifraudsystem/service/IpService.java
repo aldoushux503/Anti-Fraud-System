@@ -26,15 +26,17 @@ public class IpService {
         String ipAddress = ip.getAddress();
 
         if (!VALIDATOR.isValidInet4Address(ipAddress)) {
+            LOGGER.error("Invalid Ip address format {}", ipAddress);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         if (ipRepository.existsByAddress(ipAddress)) {
+            LOGGER.error("Ip already exists {}", ipAddress);
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
+        LOGGER.error("Saving Ip to database {}", ipAddress);
         ipRepository.save(ip);
-
         return new ResponseEntity<>(ip, HttpStatus.CREATED);
     }
 }

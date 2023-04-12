@@ -41,7 +41,7 @@ public class AuthService {
 
     public ResponseEntity<?> createNewUser(User user) {
         if (userRepository.existsByUsernameIgnoreCase(user.getUsername())) {
-            LOGGER.error("User already exists! {}", user);
+            LOGGER.error("User already exists {}", user);
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
@@ -85,6 +85,7 @@ public class AuthService {
     public ResponseEntity<?> changeUserRole(UserRoleDto userRoleDto) {
         Optional<User> u = userRepository.findUserByUsernameIgnoreCase(userRoleDto.username());
         if (u.isEmpty()) {
+            LOGGER.error("User not found {}", u);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -92,14 +93,17 @@ public class AuthService {
 
          if (!Objects.equals(userRoleDto.role(), UserRole.MERCHANT.name())
                 && !Objects.equals(userRoleDto.role(), UserRole.SUPPORT.name())) {
+             LOGGER.error("User is not Merchant or Support {}", u);
              return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
          }
 
         if (Objects.equals(user.getRole().toString(), userRoleDto.role())) {
+            LOGGER.error("User now has the same role {}", u);
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
         Role role = roleRepository.findByName(UserRole.valueOf(userRoleDto.role()));
+        LOGGER.error("Changing User role... {}", u);
         user.setRole(role);
         userRepository.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -109,16 +113,19 @@ public class AuthService {
         Optional<User> u = userRepository.findUserByUsernameIgnoreCase(userLockDto.username());
 
         if (u.isEmpty()) {
+            LOGGER.error("User not found {}", u);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         User user = u.get();
 
         if (Objects.equals(user.getRole().toString(), UserRole.ADMINISTRATOR.name())) {
+            LOGGER.error("Administrator can't be locked {}", u);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         boolean status = !Objects.equals(userLockDto.operation(), ActivityOperation.LOCK);
+        LOGGER.error("Changing lock status... {}", u);
         user.setAccountNonLocked(status);
         userRepository.save(user);
         String res = String.format("User %s %sed!", userLockDto.username(), userLockDto.operation().toString().toLowerCase());
