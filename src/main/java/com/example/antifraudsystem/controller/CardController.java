@@ -27,8 +27,9 @@ public class CardController {
     }
 
     @DeleteMapping("/stolencard/{number}")
-    public void deleteStoleCard(@PathVariable String number) {
+    public ResponseEntity<?> deleteStoleCard(@PathVariable String number) {
         LOGGER.info("Deleting card from stolen {}", number);
+        return cardService.deleteStolenCardFromDataBase(number);
     }
 
     @GetMapping("/stolencard")

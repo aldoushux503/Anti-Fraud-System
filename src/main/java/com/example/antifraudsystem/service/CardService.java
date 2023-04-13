@@ -39,4 +39,8 @@ public class CardService {
         cardRepository.save(card);
         return new ResponseEntity<>(card, HttpStatus.CREATED);
     }
+
+    public ResponseEntity<?> deleteStolenCardFromDataBase(String number) {
+        return null;
+    }
 }
