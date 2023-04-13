@@ -28,7 +28,7 @@ public class RegistrationController {
 
     @PostMapping("/user")
     public ResponseEntity<?> register(@RequestBody @Valid User user) {
-        LOGGER.info("Registering user: {}", user);
+        LOGGER.info("Registering user: {}", user.getName());
         return authService.createNewUser(user);
     }
 }

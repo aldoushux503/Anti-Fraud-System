@@ -22,13 +22,13 @@ public class CardController {
 
     @PostMapping("/stolencard")
     public ResponseEntity<?> addStolenCard(@RequestBody Card card) {
-        LOGGER.info("Adding card to stolen cards. {}", card.getNumber());
+        LOGGER.info("Adding card to stolen cards {}", card.getNumber());
         return cardService.addStolenCardToDataBase(card);
     }
 
     @DeleteMapping("/stolencard/{number}")
     public void deleteStoleCard(@PathVariable String number) {
-
+        LOGGER.info("Deleting card from stolen {}", number);
     }
 
     @GetMapping("/stolencard")

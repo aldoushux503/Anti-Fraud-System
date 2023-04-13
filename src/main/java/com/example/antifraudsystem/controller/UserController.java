@@ -31,7 +31,7 @@ public class UserController {
 
     @GetMapping("/list")
     public ResponseEntity<?> showAllUsers() {
-        LOGGER.info("Show all users");
+        LOGGER.info("Showing all users");
         return new ResponseEntity<>(authService.getAllUsers(), HttpStatus.OK);
     }
 
@@ -50,7 +50,7 @@ public class UserController {
 
     @PutMapping("/access")
     public ResponseEntity<?> changeLockStatus(@RequestBody UserLockDto userLockDto) {
-        LOGGER.info("Processing change Lock for username: {}, lock: {}", userLockDto.username(), userLockDto.operation());
+        LOGGER.info("Processing change Lock for username: {}, newLock: {}", userLockDto.username(), userLockDto.operation());
         return authService.changeLockStatus(userLockDto);
     }
 }

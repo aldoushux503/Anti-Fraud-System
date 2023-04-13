@@ -36,6 +36,7 @@ public class IpController {
 
     @GetMapping("/suspicious-ip")
     public ResponseEntity<?> showAllSuspiciousIp() {
+        LOGGER.info("Showing all suspicious Ip");
         return new ResponseEntity<>(ipService.getAllSuspiciousIp(), HttpStatus.OK);
     }
 }
