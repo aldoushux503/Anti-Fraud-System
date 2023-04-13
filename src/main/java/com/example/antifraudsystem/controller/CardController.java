@@ -3,6 +3,7 @@ package com.example.antifraudsystem.controller;
 import com.example.antifraudsystem.entity.Card;
 import com.example.antifraudsystem.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +21,9 @@ public class CardController {
     }
 
     @PostMapping("/stolencard")
-    public void addStolenCard(@RequestBody Card card) {
-
+    public ResponseEntity<?> addStolenCard(@RequestBody Card card) {
+        LOGGER.info("Adding card to stolen cards. {}", card.getNumber());
+        return cardService.addStolenCardToDataBase(card);
     }
 
     @DeleteMapping("/stolencard/{number}")

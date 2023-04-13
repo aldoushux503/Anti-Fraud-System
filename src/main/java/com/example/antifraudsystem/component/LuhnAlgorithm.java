@@ -1,12 +1,11 @@
 package com.example.antifraudsystem.component;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
 public class LuhnAlgorithm {
 
-    public boolean validate(String cardNumber) {
+    public boolean validateCardNumber(String cardNumber) {
         int sum = 0;
         for (int i = 0; i < cardNumber.length(); i++) {
             int number = Character.getNumericValue(cardNumber.charAt(i));

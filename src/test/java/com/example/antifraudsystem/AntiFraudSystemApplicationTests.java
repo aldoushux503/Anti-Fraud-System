@@ -12,8 +12,8 @@ class AntiFraudSystemApplicationTests {
 	@Test
 	void contextLoads() {
 
-		luhnAlgorithm.validate("4000008449433403");
-		luhnAlgorithm.validate("4000008449433402");
+		luhnAlgorithm.validateCardNumber("4000008449433403");
+		luhnAlgorithm.validateCardNumber("4000008449433402");
 	}
 
 }
