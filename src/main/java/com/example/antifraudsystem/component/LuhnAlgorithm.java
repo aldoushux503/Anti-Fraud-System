@@ -17,7 +17,6 @@ public class LuhnAlgorithm {
             sum += number;
         }
 
-        System.out.println(sum);
         return sum % 10 == 0;
     }
 }

@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.Optional;
+
 @Service
 public class CardService {
 
@@ -26,21 +29,38 @@ public class CardService {
 
     public ResponseEntity<?> addStolenCardToDataBase(Card card) {
         if (!luhnAlgorithm.validateCardNumber(card.getNumber())) {
-            LOGGER.error("Card has the wrong number. {}", card.getNumber());
+            LOGGER.error("Card has the wrong number {}", card.getNumber());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         if (cardRepository.existsByNumber(card.getNumber())) {
-            LOGGER.error("Card already exist in database. {}", card.getNumber());
+            LOGGER.error("Card already exist in database {}", card.getNumber());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        LOGGER.error("Saving card to database. {}", card);
+        LOGGER.info("Saving card to database {}", card);
         cardRepository.save(card);
         return new ResponseEntity<>(card, HttpStatus.CREATED);
     }
 
     public ResponseEntity<?> deleteStolenCardFromDataBase(String number) {
-        return null;
+        if (!luhnAlgorithm.validateCardNumber(number)) {
+            LOGGER.error("Card has the wrong number {}", number);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<Card> card = cardRepository.findByNumber(number);
+
+        if (card.isEmpty()) {
+            LOGGER.error("Card not found in database {}", number);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        LOGGER.info("Deleting card from database {}", number);
+        cardRepository.delete(card.get());
+
+        String res = String.format("Card %s successfully removed!", card.get().getNumber());
+        return new ResponseEntity<>(Map.of("status", res), HttpStatus.OK);
+
     }
 }
