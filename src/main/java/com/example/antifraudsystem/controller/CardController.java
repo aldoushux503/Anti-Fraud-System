@@ -3,6 +3,7 @@ package com.example.antifraudsystem.controller;
 import com.example.antifraudsystem.entity.Card;
 import com.example.antifraudsystem.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
@@ -33,8 +34,9 @@ public class CardController {
     }
 
     @GetMapping("/stolencard")
-    public void getAllStolenCards() {
-
+    public ResponseEntity<?> getAllStolenCards() {
+        LOGGER.info("Showing all stolen cards");
+        return new ResponseEntity<>(cardService.getAllCards(), HttpStatus.OK);
     }
 
 }
