@@ -1,13 +1,11 @@
 package com.example.antifraudsystem.service;
 
 import com.example.antifraudsystem.TransactionResponse;
-import com.example.antifraudsystem.component.LuhnAlgorithm;
 import com.example.antifraudsystem.entity.Transaction;
 import com.example.antifraudsystem.enums.TransactionStatus;
 import com.example.antifraudsystem.repository.CardRepository;
 import com.example.antifraudsystem.repository.IpRepository;
 import com.example.antifraudsystem.repository.TransactionRepository;
-import org.apache.commons.validator.routines.InetAddressValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,31 +23,20 @@ import java.util.stream.Collectors;
 public class TransactionService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
-    private final InetAddressValidator VALIDATOR = InetAddressValidator.getInstance();
-    private final LuhnAlgorithm luhnAlgorithm;
     private CardRepository cardRepository;
     private IpRepository ipRepository;
     private TransactionRepository transactionRepository;
 
     @Autowired
-    public TransactionService(CardRepository cardRepository, IpRepository ipRepository,
-                              LuhnAlgorithm luhnAlgorithm, TransactionRepository transactionRepository) {
+    public TransactionService(CardRepository cardRepository,
+                              IpRepository ipRepository,
+                              TransactionRepository transactionRepository) {
         this.cardRepository = cardRepository;
         this.ipRepository = ipRepository;
-        this.luhnAlgorithm = luhnAlgorithm;
         this.transactionRepository = transactionRepository;
     }
 
     public ResponseEntity<?> addTransactionToDataBase(Transaction transaction) {
-        if (!luhnAlgorithm.validateCardNumber(transaction.getNumber())
-                || !VALIDATOR.isValidInet4Address(transaction.getIp())) {
-            LOGGER.error(
-                    "The card number or IP is not in the correct form: Card - {} IP - {}",
-                    transaction.getNumber(), transaction.getIp()
-            );
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
         LOGGER.info("Saving transaction to database");
         transactionRepository.save(transaction);
         return new ResponseEntity<>(HttpStatus.OK);

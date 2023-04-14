@@ -1,6 +1,7 @@
 package com.example.antifraudsystem.entity;
 
 
+import com.example.antifraudsystem.Ipv4;
 import com.example.antifraudsystem.enums.RegionCode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.LuhnCheck;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -32,6 +34,7 @@ public class Transaction {
 
     @Column
     @NotBlank
+    @Ipv4
     private String ip;
 
     @Column
@@ -45,7 +48,8 @@ public class Transaction {
     private RegionCode region;
 
     @Column
-    @NotBlank
     @Temporal(TemporalType.DATE)
+    @NotBlank
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date date;
 }
