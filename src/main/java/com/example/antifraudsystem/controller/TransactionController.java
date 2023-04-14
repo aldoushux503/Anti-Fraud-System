@@ -26,10 +26,18 @@ public class TransactionController {
 
     @PostMapping("/transaction")
     public ResponseEntity<?> validateAmount(@RequestBody @Valid Transaction transaction) {
-        LOGGER.info(
-                "Transaction processing {}, {}, {}",
-                transaction.getAmount(), transaction.getNumber(), transaction.getIp()
-        );
+        LOGGER.info("Saving transaction to database {}, {}", transaction.getNumber(), transaction.getIp());
+        ResponseEntity<?> savingResponse = transactionService.addTransactionToDataBase(transaction);
+
+        if (savingResponse.getStatusCode() == HttpStatus.BAD_REQUEST) {
+            return savingResponse;
+        }
+        LOGGER.info("Processing transaction result and info {}, {}", transaction.getNumber(), transaction.getIp());
         return transactionService.makeTransaction(transaction);
+    }
+
+    @GetMapping("/transaction")
+    public ResponseEntity<?> showAllTransactions() {
+        return new ResponseEntity<>(transactionService.getAllTransactions(), HttpStatus.OK);
     }
 }

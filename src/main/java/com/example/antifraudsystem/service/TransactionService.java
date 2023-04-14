@@ -6,10 +6,12 @@ import com.example.antifraudsystem.entity.Transaction;
 import com.example.antifraudsystem.enums.TransactionStatus;
 import com.example.antifraudsystem.repository.CardRepository;
 import com.example.antifraudsystem.repository.IpRepository;
+import com.example.antifraudsystem.repository.TransactionRepository;
 import org.apache.commons.validator.routines.InetAddressValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,15 +29,18 @@ public class TransactionService {
     private final LuhnAlgorithm luhnAlgorithm;
     private CardRepository cardRepository;
     private IpRepository ipRepository;
+    private TransactionRepository transactionRepository;
 
     @Autowired
-    public TransactionService(CardRepository cardRepository, IpRepository ipRepository, LuhnAlgorithm luhnAlgorithm) {
+    public TransactionService(CardRepository cardRepository, IpRepository ipRepository,
+                              LuhnAlgorithm luhnAlgorithm, TransactionRepository transactionRepository) {
         this.cardRepository = cardRepository;
         this.ipRepository = ipRepository;
         this.luhnAlgorithm = luhnAlgorithm;
+        this.transactionRepository = transactionRepository;
     }
 
-    public ResponseEntity<?> makeTransaction(Transaction transaction) {
+    public ResponseEntity<?> addTransactionToDataBase(Transaction transaction) {
         if (!luhnAlgorithm.validateCardNumber(transaction.getNumber())
                 || !VALIDATOR.isValidInet4Address(transaction.getIp())) {
             LOGGER.error(
@@ -45,6 +50,12 @@ public class TransactionService {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        LOGGER.info("Saving transaction to database");
+        transactionRepository.save(transaction);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> makeTransaction(Transaction transaction) {
         long amount = transaction.getAmount();
         String cardNumber = transaction.getNumber();
         String ipAddress = transaction.getIp();
@@ -88,5 +99,9 @@ public class TransactionService {
         } else {
             return TransactionStatus.PROHIBITED;
         }
+    }
+
+    public List<Transaction> getAllTransactions() {
+        return transactionRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 }
