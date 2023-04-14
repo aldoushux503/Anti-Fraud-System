@@ -33,7 +33,7 @@ public class CardController {
     }
 
     @DeleteMapping("/stolencard/{number}")
-    public ResponseEntity<?> deleteStoleCard(@PathVariable @LuhnCheck @NotBlank  String number) {
+    public ResponseEntity<?> deleteStoleCard(@PathVariable @LuhnCheck @NotBlank String number) {
         LOGGER.info("Deleting card from stolen {}", number);
         return cardService.deleteStolenCardFromDataBase(number);
     }

@@ -5,6 +5,7 @@ import com.example.antifraudsystem.Ipv4;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,9 +22,9 @@ public class Ip {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Ipv4
     @Column
     @JsonProperty(value = "ip")
-    @NotBlank(message = "Ip is blank")
-    @Ipv4(message = "Ip address has wrong format")
+    @NotNull(message = "Ip is blank")
     private String address;
 }

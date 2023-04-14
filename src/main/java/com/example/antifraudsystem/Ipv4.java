@@ -19,7 +19,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @ReportAsSingleViolation
 public @interface Ipv4 {
-    String message() default "Must be ipv4";
+    String message() default "Ip address has wrong format";
 
     Class<?>[] groups() default {};
 

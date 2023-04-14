@@ -3,6 +3,7 @@ package com.example.antifraudsystem.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class Card {
 
     @Column
     @JsonProperty(value = "number")
-    @NotBlank(message = "Card number is null")
+    @NotNull(message = "Card number is null")
     @LuhnCheck(message = "Card number has wrong format")
     private String number;
 }

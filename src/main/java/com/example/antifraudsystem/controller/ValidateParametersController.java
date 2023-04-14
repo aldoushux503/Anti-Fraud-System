@@ -9,12 +9,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @ControllerAdvice
-public class ValidateParametersController  {
+public class ValidateParametersController {
 
     @ResponseBody
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<?> exceptionHandler() {
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> exceptionHandler(Exception e) {
+        return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
     }
 
 }

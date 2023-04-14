@@ -14,9 +14,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,6 +60,37 @@ public class TransactionService {
             LOGGER.info("Adding amount violations");
             violations.add("amount");
         }
+
+
+        List<Transaction> transactions = transactionRepository.findAllByNumber(cardNumber);
+        LocalDateTime now = LocalDateTime.now();
+        String closestIpAddress = null;
+        Duration closestDuration = null;
+
+        for (Transaction t : transactions) {
+            Duration duration = Duration.between(t.getDate(),  now);
+            if (closestDuration == null || duration.compareTo(closestDuration) < 0) {
+                closestDuration = duration;
+                closestIpAddress = t.getIp();
+            }
+        }
+        System.out.println(closestIpAddress);
+        int counter = 0;
+
+        for (Transaction t : transactions) {
+            if (!Objects.equals(t.getIp(), closestIpAddress)) {
+                counter++;
+            }
+        }
+
+        if (counter == 3) {
+            violations.add("ip-correlation");
+            response.setResult(TransactionStatus.MANUAL_PROCESSING);
+        }
+        if (counter > 3) {
+            violations.add("ip-correlation");
+            response.setResult(TransactionStatus.PROHIBITED);
+        }
         if (cardRepository.existsByNumber(cardNumber)) {
             LOGGER.info("Adding credit card violations");
             violations.add("card-number");
@@ -65,6 +101,8 @@ public class TransactionService {
             violations.add("ip");
             response.setResult(TransactionStatus.PROHIBITED);
         }
+
+
 
         String info = violations.isEmpty()
                 ? response.getResult() == TransactionStatus.MANUAL_PROCESSING ? "amount" : "none"
