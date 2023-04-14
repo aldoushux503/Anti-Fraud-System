@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionService {
 
-    Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
-    InetAddressValidator VALIDATOR = InetAddressValidator.getInstance();
-    CardRepository cardRepository;
-    IpRepository ipRepository;
-    LuhnAlgorithm luhnAlgorithm;
+    private final Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
+    private final InetAddressValidator VALIDATOR = InetAddressValidator.getInstance();
+    private final LuhnAlgorithm luhnAlgorithm;
+    private CardRepository cardRepository;
+    private IpRepository ipRepository;
 
     @Autowired
     public TransactionService(CardRepository cardRepository, IpRepository ipRepository, LuhnAlgorithm luhnAlgorithm) {
