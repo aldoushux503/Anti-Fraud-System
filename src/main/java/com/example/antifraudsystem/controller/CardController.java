@@ -3,6 +3,7 @@ package com.example.antifraudsystem.controller;
 import com.example.antifraudsystem.entity.Card;
 import com.example.antifraudsystem.service.CardService;
 import jakarta.validation.Valid;
+import org.hibernate.validator.constraints.LuhnCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class CardController {
     }
 
     @DeleteMapping("/stolencard/{number}")
-    public ResponseEntity<?> deleteStoleCard(@PathVariable String number) {
+    public ResponseEntity<?> deleteStoleCard(@PathVariable @LuhnCheck String number) {
         LOGGER.info("Deleting card from stolen {}", number);
         return cardService.deleteStolenCardFromDataBase(number);
     }

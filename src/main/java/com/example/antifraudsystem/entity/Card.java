@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.LuhnCheck;
 
 
 @Getter @Setter
@@ -20,7 +21,8 @@ public class Card {
     private long id;
 
     @Column
-    @NotBlank
     @JsonProperty(value = "number")
+    @NotBlank(message = "Card number is null")
+    @LuhnCheck(message = "Card number has wrong format")
     private String number;
 }
