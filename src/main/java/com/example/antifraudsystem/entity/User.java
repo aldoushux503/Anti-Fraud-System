@@ -19,15 +19,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column
-    @NotBlank
+    @NotBlank(message = "User name is blank")
     private String name;
+
     @Column
-    @NotBlank
+    @NotBlank(message = "User username is blank")
     private String username;
 
     @Column
+    @NotBlank(message = "User password is blank")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotBlank
     private String password;
 
     @ManyToOne
