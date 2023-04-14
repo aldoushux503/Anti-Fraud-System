@@ -15,25 +15,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-
-    @Autowired
-    public SecurityConfiguration(RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
-        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
-    }
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz ->
                         authz
                                 .requestMatchers("/actuator/shutdown").permitAll() // needs to run test
+                                .requestMatchers("/error/**").permitAll() // removes validation problem
                                 .requestMatchers("/api/auth/user").permitAll()
-                                .requestMatchers("/api/antifraud/suspicious-ip/**").permitAll()
-                                .requestMatchers("/api/antifraud/stolencard/**").permitAll()
                                 .requestMatchers("/api/antifraud/transaction").permitAll()
 //                                .requestMatchers("/api/antifraud/transaction").hasRole(UserRole.MERCHANT.name())
+                                .requestMatchers("/api/antifraud/suspicious-ip/**").permitAll()
+//                                .requestMatchers("/api/antifraud/suspicious-ip/**").hasRole(UserRole.SUPPORT.name())
+                                .requestMatchers("/api/antifraud/stolencard/**").permitAll()
+//                                .requestMatchers("/api/antifraud/stolencard/**").hasRole(UserRole.SUPPORT.name())
                                 .requestMatchers("/api/auth/user/*", "/api/auth/access","/api/auth/role").hasAnyRole(UserRole.ADMINISTRATOR.name())
                                 .requestMatchers("/api/auth/list").hasAnyRole(UserRole.ADMINISTRATOR.name(), UserRole.SUPPORT.name())
 
@@ -45,8 +40,7 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests() // manage access
                 .and()
-                .httpBasic()
-                .authenticationEntryPoint(restAuthenticationEntryPoint); // Handles auth error;
+                .httpBasic();
 
         return http.build();
     }

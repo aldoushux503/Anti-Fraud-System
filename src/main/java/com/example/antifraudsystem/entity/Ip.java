@@ -3,6 +3,7 @@ package com.example.antifraudsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class Ip {
     private long id;
 
     @Column
+    @NotBlank
     @JsonProperty(value = "ip")
     private String address;
 }

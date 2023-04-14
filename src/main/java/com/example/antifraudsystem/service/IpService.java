@@ -20,9 +20,9 @@ import java.util.Optional;
 @Service
 public class IpService {
 
-    InetAddressValidator VALIDATOR = InetAddressValidator.getInstance();
+    private final InetAddressValidator VALIDATOR = InetAddressValidator.getInstance();
     private final Logger LOGGER = LoggerFactory.getLogger(IpService.class);
-    IpRepository ipRepository;
+    private IpRepository ipRepository;
 
     @Autowired
     public IpService(IpRepository ipRepository) {
@@ -44,7 +44,7 @@ public class IpService {
 
         LOGGER.info("Saving IP to database {}", ipAddress);
         ipRepository.save(ip);
-        return new ResponseEntity<>(ip, HttpStatus.CREATED);
+        return new ResponseEntity<>(ip, HttpStatus.OK);
     }
 
 
@@ -58,6 +58,7 @@ public class IpService {
 
         if (ip.isEmpty()) {
             LOGGER.error("IP address not found {}", ipAddress);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         LOGGER.info("Deleting IP from database {}", ipAddress);

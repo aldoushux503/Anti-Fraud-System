@@ -2,6 +2,7 @@ package com.example.antifraudsystem.controller;
 
 import com.example.antifraudsystem.entity.Ip;
 import com.example.antifraudsystem.service.IpService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class IpController {
     }
 
     @PostMapping("/suspicious-ip")
-    public ResponseEntity<?> addSuspiciousIp(@RequestBody Ip ip) {
+    public ResponseEntity<?> addSuspiciousIp(@RequestBody @Valid Ip ip) {
         LOGGER.info("Adding IP address to suspicious {}", ip.getAddress());
         return ipService.addSuspiciousIpToDataBase(ip);
     }

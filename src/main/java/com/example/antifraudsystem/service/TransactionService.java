@@ -38,14 +38,13 @@ public class TransactionService {
     TODO
     Add logging
     */
-
     public ResponseEntity<?> makeTransaction(Transaction transaction) {
-        long amount = transaction.amount();
-        String cardNumber = transaction.number();
-        String ipAddress = transaction.ip();
+        long amount = transaction.getAmount();
+        String cardNumber = transaction.getNumber();
+        String ipAddress = transaction.getIp();
 
-        if (!luhnAlgorithm.validateCardNumber(transaction.number())
-                || !VALIDATOR.isValidInet4Address(transaction.ip())) {
+        if (!luhnAlgorithm.validateCardNumber(transaction.getNumber())
+                || !VALIDATOR.isValidInet4Address(transaction.getIp())) {
             LOGGER.error(
                     "The card number or IP is not in the correct form: Card - {} IP - {}", cardNumber, ipAddress
             );
@@ -55,26 +54,31 @@ public class TransactionService {
         TransactionResponse response;
 
         if (amount <= 200) {
-            response = new TransactionResponse(TransactionStatus.ALLOWED, List.of("none"));
+            response = new TransactionResponse(TransactionStatus.ALLOWED, "none");
         } else if (amount <= 1500) {
-            response = new TransactionResponse(TransactionStatus.MANUAL_PROCESSING, List.of("amount"));
+            response = new TransactionResponse(TransactionStatus.MANUAL_PROCESSING, "amount");
         } else {
-            response = new TransactionResponse(TransactionStatus.PROHIBITED, List.of("amount"));
+            response = new TransactionResponse(TransactionStatus.PROHIBITED, "amount");
         }
 
         if (cardRepository.existsByNumber(cardNumber)) {
-            if (response.getResult() == TransactionStatus.ALLOWED) {
-                response.setInfo(List.of("card-number"));
+            if (response.getResult() == TransactionStatus.PROHIBITED) {
+                response.setInfo("amount, card-number");
             } else {
-                response.getInfo().add("card-number");
+                response.setInfo("card-number");
             }
             response.setResult(TransactionStatus.PROHIBITED);
         }
+
         if (ipRepository.existsByAddress(ipAddress)) {
-            if (response.getResult() == TransactionStatus.ALLOWED) {
-                response.setInfo(List.of("ip"));
+            if (response.getResult() == TransactionStatus.PROHIBITED) {
+                response.setInfo(response.getInfo() + ", " + "ip");
             } else {
-                response.getInfo().add("ip");
+                if (response.getInfo().contains("card-number")) {
+                    response.setInfo("card-number, ip");
+                } else {
+                    response.setInfo("ip");
+                }
             }
             response.setResult(TransactionStatus.PROHIBITED);
         }

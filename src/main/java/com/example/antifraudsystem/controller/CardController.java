@@ -2,6 +2,7 @@ package com.example.antifraudsystem.controller;
 
 import com.example.antifraudsystem.entity.Card;
 import com.example.antifraudsystem.service.CardService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class CardController {
     }
 
     @PostMapping("/stolencard")
-    public ResponseEntity<?> addStolenCard(@RequestBody Card card) {
+    public ResponseEntity<?> addStolenCard(@RequestBody @Valid Card card) {
         LOGGER.info("Adding card to stolen cards {}", card.getNumber());
         return cardService.addStolenCardToDataBase(card);
     }

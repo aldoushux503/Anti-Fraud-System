@@ -42,7 +42,7 @@ public class CardService {
 
         LOGGER.info("Saving card to database {}", card);
         cardRepository.save(card);
-        return new ResponseEntity<>(card, HttpStatus.CREATED);
+        return new ResponseEntity<>(card, HttpStatus.OK);
     }
 
     public ResponseEntity<?> deleteStolenCardFromDataBase(String number) {

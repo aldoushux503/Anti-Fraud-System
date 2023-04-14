@@ -3,6 +3,7 @@ package com.example.antifraudsystem.entity;
 
 import com.example.antifraudsystem.enums.UserRole;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,6 +37,4 @@ public class Role {
     public String toString() {
         return name.toString();
     }
-
-
 }
