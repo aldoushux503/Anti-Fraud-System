@@ -51,20 +51,19 @@ public class TransactionService {
         TransactionResponse response = new TransactionResponse();
         List<String> violations = new ArrayList<>();
 
-
         response.setResult(checkAmount(amount));
 
         if (response.getResult() == TransactionStatus.PROHIBITED) {
-            LOGGER.error("Adding amount violations");
+            LOGGER.info("Adding amount violations");
             violations.add("amount");
         }
         if (cardRepository.existsByNumber(cardNumber)) {
-            LOGGER.error("Adding credit card violations");
+            LOGGER.info("Adding credit card violations");
             violations.add("card-number");
             response.setResult(TransactionStatus.PROHIBITED);
         }
         if (ipRepository.existsByAddress(ipAddress)) {
-            LOGGER.error("Adding IP violations");
+            LOGGER.info("Adding IP violations");
             violations.add("ip");
             response.setResult(TransactionStatus.PROHIBITED);
         }
@@ -74,13 +73,14 @@ public class TransactionService {
                 : violations.stream().sorted().collect(Collectors.joining(", "));
 
         response.setInfo(info);
-        LOGGER.error("Returning transaction response {} {}", response.getResult(), response.getInfo());
+
+        LOGGER.info("Returning transaction response {} {}", response.getResult(), response.getInfo());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     private TransactionStatus checkAmount(long amount) {
-        LOGGER.error("Checking amount {}", amount);
+        LOGGER.info("Checking amount {}", amount);
         if (amount <= 200) {
             return TransactionStatus.ALLOWED;
         } else if (amount <= 1500) {
