@@ -106,30 +106,27 @@ public class TransactionService {
         RegionCode closestRegion = null;
         Duration closestDuration = null;
 
-        LocalDateTime d = null;
-
         List<Transaction> transactionsHourAgo = new ArrayList<>();
-        for (Transaction t : transactions) {
-            Duration duration = Duration.between(t.getDate(), hourAgo);
-            if (duration.isNegative() || duration.isZero()) {
-                transactionsHourAgo.add(t);
+        Set<String> processedTransactionFields = new HashSet<>();
 
-                if (closestDuration == null || duration.compareTo(closestDuration) > 0) {
-                    d = t.getDate();
-                    closestDuration = duration;
-                    closestIpAddress = t.getIp();
-                    closestRegion = t.getRegion();
+
+        for (Transaction t : transactions) {
+            String transactionFields = t.getNumber() + t.getDate() + t.getIp() + t.getRegion();
+            if (!processedTransactionFields.contains(transactionFields)) {
+                processedTransactionFields.add(transactionFields);
+
+                Duration duration = Duration.between(hourAgo, t.getDate());
+                if (duration.toMinutes() <= 60 && duration.toMinutes() >= 0) {
+                    transactionsHourAgo.add(t);
+
+                    if (closestDuration == null || duration.compareTo(closestDuration) < 0) {
+                        closestDuration = duration;
+                        closestIpAddress = t.getIp();
+                        closestRegion = t.getRegion();
+                    }
                 }
             }
         }
-
-//        for (Transaction ago : transactionsHourAgo) {
-//            System.out.println(String.format("%s %s %s %s", ago.getNumber(), ago.getIp(), ago.getRegion(), ago.getDate()));
-//        }
-//
-//        System.out.println(closestIpAddress);
-//        System.out.println(closestRegion);
-//        System.out.println(d);
 
         Map<String, Integer> correlations =
                 new HashMap<>(Map.of("ip-correlation", 0, "region-correlation", 0));
