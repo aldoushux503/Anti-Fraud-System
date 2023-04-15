@@ -2,7 +2,7 @@ package com.example.antifraudsystem.controller;
 
 import com.example.antifraudsystem.Ipv4;
 import com.example.antifraudsystem.entity.Ip;
-import com.example.antifraudsystem.service.IpService;
+import com.example.antifraudsystem.service.SuspiciousIpService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.slf4j.Logger;
@@ -16,32 +16,32 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequestMapping("/api/antifraud")
-public class IpController {
+public class SuspiciousIpController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(IpController.class);
-    IpService ipService;
+    private final Logger LOGGER = LoggerFactory.getLogger(SuspiciousIpController.class);
+    SuspiciousIpService suspiciousIpService;
 
 
     @Autowired
-    public IpController(IpService ipService) {
-        this.ipService = ipService;
+    public SuspiciousIpController(SuspiciousIpService suspiciousIpService) {
+        this.suspiciousIpService = suspiciousIpService;
     }
 
     @PostMapping("/suspicious-ip")
     public ResponseEntity<?> addSuspiciousIp(@RequestBody @Valid Ip ip) {
         LOGGER.info("Adding IP address to suspicious {}", ip.getAddress());
-        return ipService.addSuspiciousIpToDataBase(ip);
+        return suspiciousIpService.addSuspiciousIpToDataBase(ip);
     }
 
     @DeleteMapping("/suspicious-ip/{ip}")
     public ResponseEntity<?> deleteSuspiciousIp(@PathVariable @Ipv4 @NotBlank String ip) {
         LOGGER.info("Deleting IP address from suspicious {}", ip);
-        return ipService.deleteSuspiciousIpFromDataBase(ip);
+        return suspiciousIpService.deleteSuspiciousIpFromDataBase(ip);
     }
 
     @GetMapping("/suspicious-ip")
     public ResponseEntity<?> showAllSuspiciousIp() {
         LOGGER.info("Showing all suspicious Ip");
-        return new ResponseEntity<>(ipService.getAllSuspiciousIp(), HttpStatus.OK);
+        return new ResponseEntity<>(suspiciousIpService.getAllSuspiciousIp(), HttpStatus.OK);
     }
 }

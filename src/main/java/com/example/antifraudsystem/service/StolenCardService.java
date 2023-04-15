@@ -15,11 +15,11 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class CardService {
-    private final Logger LOGGER = LoggerFactory.getLogger(CardService.class);
+public class StolenCardService {
+    private final Logger LOGGER = LoggerFactory.getLogger(StolenCardService.class);
     private CardRepository cardRepository;
     @Autowired
-    public CardService(CardRepository cardRepository) {
+    public StolenCardService(CardRepository cardRepository) {
         this.cardRepository = cardRepository;
     }
 
