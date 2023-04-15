@@ -2,6 +2,7 @@ package com.example.antifraudsystem.service;
 
 import com.example.antifraudsystem.TransactionResponse;
 import com.example.antifraudsystem.entity.Transaction;
+import com.example.antifraudsystem.enums.RegionCode;
 import com.example.antifraudsystem.enums.TransactionStatus;
 import com.example.antifraudsystem.repository.CardRepository;
 import com.example.antifraudsystem.repository.IpRepository;
@@ -18,10 +19,7 @@ import java.text.DateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,34 +59,22 @@ public class TransactionService {
             violations.add("amount");
         }
 
+        Map<String, Integer> correlations = correlationCheck(cardNumber);
 
-        List<Transaction> transactions = transactionRepository.findAllByNumber(cardNumber);
-        LocalDateTime now = LocalDateTime.now();
-        String closestIpAddress = null;
-        Duration closestDuration = null;
-
-        for (Transaction t : transactions) {
-            Duration duration = Duration.between(t.getDate(),  now);
-            if (closestDuration == null || duration.compareTo(closestDuration) < 0) {
-                closestDuration = duration;
-                closestIpAddress = t.getIp();
-            }
-        }
-        System.out.println(closestIpAddress);
-        int counter = 0;
-
-        for (Transaction t : transactions) {
-            if (!Objects.equals(t.getIp(), closestIpAddress)) {
-                counter++;
-            }
-        }
-
-        if (counter == 3) {
+        if (correlations.get("ip-correlation") == 3) {
             violations.add("ip-correlation");
             response.setResult(TransactionStatus.MANUAL_PROCESSING);
         }
-        if (counter > 3) {
+        if (correlations.get("region-correlation") == 3) {
+            violations.add("region-correlation");
+            response.setResult(TransactionStatus.MANUAL_PROCESSING);
+        }
+        if (correlations.get("ip-correlation") > 3) {
             violations.add("ip-correlation");
+            response.setResult(TransactionStatus.PROHIBITED);
+        }
+        if (correlations.get("region-correlation") > 3) {
+            violations.add("region-correlation");
             response.setResult(TransactionStatus.PROHIBITED);
         }
         if (cardRepository.existsByNumber(cardNumber)) {
@@ -112,6 +98,37 @@ public class TransactionService {
 
         LOGGER.info("Returning transaction response {} {}", response.getResult(), response.getInfo());
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public Map<String, Integer> correlationCheck(String cardNumber) {
+        List<Transaction> transactions = transactionRepository.findAllByNumber(cardNumber);
+        LocalDateTime now = LocalDateTime.now();
+        String closestIpAddress = null;
+        RegionCode closestRegion = null;
+        Duration closestDuration = null;
+
+        for (Transaction t : transactions) {
+            Duration duration = Duration.between(t.getDate(),  now);
+            if (closestDuration == null || duration.compareTo(closestDuration) < 0) {
+                closestDuration = duration;
+                closestIpAddress = t.getIp();
+                closestRegion = t.getRegion();
+            }
+        }
+
+        Map<String, Integer> correlations =
+                new HashMap<>(Map.of("ip-correlation", 0, "region-correlation", 0));
+
+        for (Transaction t : transactions) {
+            if (!Objects.equals(t.getIp(), closestIpAddress)) {
+                correlations.merge("ip-correlation", 1, Integer::sum);
+            }
+            if (!Objects.equals(t.getRegion(), closestRegion)) {
+                correlations.merge("region-correlation", 1, Integer::sum);
+            }
+        }
+
+        return correlations;
     }
 
 
