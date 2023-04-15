@@ -21,7 +21,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authz ->
                         authz
                                 .requestMatchers("/actuator/shutdown").permitAll() // needs to run test
-                                .requestMatchers("/error/**").permitAll() // removes validation problem
+                                .requestMatchers("/error/**").permitAll() // removes problem with validation
                                 .requestMatchers("/api/auth/user").permitAll()
                                 .requestMatchers("/api/antifraud/transaction").permitAll()
 //                                .requestMatchers("/api/antifraud/transaction").hasRole(UserRole.MERCHANT.name())

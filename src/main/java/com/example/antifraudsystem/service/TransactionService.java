@@ -59,7 +59,7 @@ public class TransactionService {
             violations.add("amount");
         }
 
-        Map<String, Integer> correlations = correlationCheck(cardNumber);
+        Map<String, Integer> correlations = correlationCheck(transaction);
 
         if (correlations.get("ip-correlation") == 3) {
             violations.add("ip-correlation");
@@ -89,7 +89,6 @@ public class TransactionService {
         }
 
 
-
         String info = violations.isEmpty()
                 ? response.getResult() == TransactionStatus.MANUAL_PROCESSING ? "amount" : "none"
                 : violations.stream().sorted().collect(Collectors.joining(", "));
@@ -100,26 +99,46 @@ public class TransactionService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public Map<String, Integer> correlationCheck(String cardNumber) {
-        List<Transaction> transactions = transactionRepository.findAllByNumber(cardNumber);
-        LocalDateTime now = LocalDateTime.now();
+    public Map<String, Integer> correlationCheck(Transaction transaction) {
+        List<Transaction> transactions = transactionRepository.findAllByNumber(transaction.getNumber());
+        LocalDateTime hourAgo = transaction.getDate().minusHours(1);
         String closestIpAddress = null;
         RegionCode closestRegion = null;
         Duration closestDuration = null;
 
+        LocalDateTime d = null;
+
+        List<Transaction> transactionsHourAgo = new ArrayList<>();
         for (Transaction t : transactions) {
-            Duration duration = Duration.between(t.getDate(),  now);
-            if (closestDuration == null || duration.compareTo(closestDuration) < 0) {
-                closestDuration = duration;
-                closestIpAddress = t.getIp();
-                closestRegion = t.getRegion();
+            Duration duration = Duration.between(t.getDate(), hourAgo);
+            if (duration.isNegative() || duration.isZero()) {
+                transactionsHourAgo.add(t);
+
+                if (closestDuration == null || duration.compareTo(closestDuration) > 0) {
+                    d = t.getDate();
+                    closestDuration = duration;
+                    closestIpAddress = t.getIp();
+                    closestRegion = t.getRegion();
+                }
             }
         }
+
+//        for (Transaction ago : transactionsHourAgo) {
+//            System.out.println(String.format("%s %s %s %s", ago.getNumber(), ago.getIp(), ago.getRegion(), ago.getDate()));
+//        }
+//
+//        System.out.println(closestIpAddress);
+//        System.out.println(closestRegion);
+//        System.out.println(d);
 
         Map<String, Integer> correlations =
                 new HashMap<>(Map.of("ip-correlation", 0, "region-correlation", 0));
 
-        for (Transaction t : transactions) {
+        if (cardRepository == null || closestIpAddress == null) {
+            return correlations;
+        }
+
+        for (Transaction t : transactionsHourAgo) {
             if (!Objects.equals(t.getIp(), closestIpAddress)) {
                 correlations.merge("ip-correlation", 1, Integer::sum);
             }
