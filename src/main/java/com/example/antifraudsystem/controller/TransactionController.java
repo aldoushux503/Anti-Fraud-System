@@ -40,4 +40,5 @@ public class TransactionController {
     public ResponseEntity<?> showAllTransactions() {
         return new ResponseEntity<>(transactionService.getAllTransactions(), HttpStatus.OK);
     }
+
 }

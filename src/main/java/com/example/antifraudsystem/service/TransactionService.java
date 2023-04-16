@@ -162,4 +162,8 @@ public class TransactionService {
     public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
+
+    public List<Transaction> getTransactionsByNumber(String number) {
+        return transactionRepository.findAllByNumber(number);
+    }
 }

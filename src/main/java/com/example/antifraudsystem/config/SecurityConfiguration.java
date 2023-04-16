@@ -23,7 +23,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/actuator/shutdown").permitAll() // needs to run test
                                 .requestMatchers("/error/**").permitAll() // removes problem with validation
                                 .requestMatchers("/api/auth/user").permitAll()
-                                .requestMatchers("/api/antifraud/transaction").permitAll()
+                                .requestMatchers("/api/antifraud/transaction/**").permitAll()
 //                                .requestMatchers("/api/antifraud/transaction").hasRole(UserRole.MERCHANT.name())
                                 .requestMatchers("/api/antifraud/suspicious-ip/**").permitAll()
 //                                .requestMatchers("/api/antifraud/suspicious-ip/**").hasRole(UserRole.SUPPORT.name())
