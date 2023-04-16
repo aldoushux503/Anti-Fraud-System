@@ -160,10 +160,12 @@ public class TransactionService {
     }
 
     public List<Transaction> getAllTransactions() {
+        LOGGER.info("Getting all transactions");
         return transactionRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     public List<Transaction> getTransactionsByNumber(String number) {
+        LOGGER.info("Getting transactions by a card number");
         return transactionRepository.findAllByNumber(number);
     }
 }

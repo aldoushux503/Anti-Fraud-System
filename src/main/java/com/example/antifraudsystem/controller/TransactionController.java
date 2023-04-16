@@ -42,13 +42,17 @@ public class TransactionController {
 
     @GetMapping("/transaction/history")
     public ResponseEntity<?> showAllTransactions() {
+        LOGGER.info("Showing all transactions");
         return new ResponseEntity<>(transactionService.getAllTransactions(), HttpStatus.OK);
     }
 
     @GetMapping("/transaction/history/{number}")
     public ResponseEntity<?> showSpecifiedTransactions(@PathVariable @LuhnCheck String number) {
+        LOGGER.info("Showing transactions by a card number");
         List<Transaction> transactions = transactionService.getTransactionsByNumber(number);
+
         if (transactions.isEmpty()) {
+            LOGGER.info("Transaction not found in database");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(transactions, HttpStatus.OK);
