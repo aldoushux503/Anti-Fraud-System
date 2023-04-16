@@ -4,15 +4,19 @@ import com.example.antifraudsystem.enums.TransactionStatus;
 import com.example.antifraudsystem.entity.Transaction;
 import com.example.antifraudsystem.service.TransactionService;
 import jakarta.validation.Valid;
+import org.hibernate.validator.constraints.LuhnCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
+@Validated
 @RestController
 @RequestMapping("/api/antifraud")
 public class TransactionController {
@@ -42,7 +46,11 @@ public class TransactionController {
     }
 
     @GetMapping("/transaction/history/{number}")
-    public ResponseEntity<?> showSpecifiedTransactions(@PathVariable String number) {
-        return new ResponseEntity<>(transactionService.getTransactionsByNumber(number), HttpStatus.OK);
+    public ResponseEntity<?> showSpecifiedTransactions(@PathVariable @LuhnCheck String number) {
+        List<Transaction> transactions = transactionService.getTransactionsByNumber(number);
+        if (transactions.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 }
