@@ -41,4 +41,8 @@ public class TransactionController {
         return new ResponseEntity<>(transactionService.getAllTransactions(), HttpStatus.OK);
     }
 
+    @GetMapping("/transaction/history/{number}")
+    public ResponseEntity<?> showSpecifiedTransactions(@PathVariable String number) {
+        return new ResponseEntity<>(transactionService.getTransactionsByNumber(number), HttpStatus.OK);
+    }
 }
