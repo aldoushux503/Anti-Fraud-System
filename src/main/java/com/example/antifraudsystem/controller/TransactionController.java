@@ -36,7 +36,7 @@ public class TransactionController {
         return transactionService.makeTransaction(transaction);
     }
 
-    @GetMapping("/transaction")
+    @GetMapping("/transaction/history")
     public ResponseEntity<?> showAllTransactions() {
         return new ResponseEntity<>(transactionService.getAllTransactions(), HttpStatus.OK);
     }
