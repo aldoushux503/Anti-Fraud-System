@@ -36,13 +36,13 @@ public class TransactionController {
         return transactionService.processTransaction(transaction);
     }
 
-    @GetMapping("/transaction/history")
+    @GetMapping("/history")
     public ResponseEntity<?> showAllTransactions() {
         LOGGER.info("Showing all transactions");
         return new ResponseEntity<>(transactionService.getAllTransactions(), HttpStatus.OK);
     }
 
-    @GetMapping("/transaction/history/{number}")
+    @GetMapping("/history/{number}")
     public ResponseEntity<?> showSpecifiedTransactions(@PathVariable @LuhnCheck String number) {
         LOGGER.info("Showing transactions by a card number");
         List<Transaction> transactions = transactionService.getTransactionsByNumber(number);
