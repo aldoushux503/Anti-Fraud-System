@@ -91,6 +91,11 @@ public class TransactionService {
 
         response.setInfo(info);
 
+        // Set result and re-save transaction
+        transaction.setResult(response.getResult());
+        this.addTransactionToDataBase(transaction);
+
+
         LOGGER.info("Returning transaction response {} {}", response.getResult(), response.getInfo());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

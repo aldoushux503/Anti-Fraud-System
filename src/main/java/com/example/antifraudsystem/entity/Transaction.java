@@ -6,19 +6,13 @@ import com.example.antifraudsystem.enums.RegionCode;
 import com.example.antifraudsystem.enums.TransactionStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
-import jdk.jfr.Timestamp;
 import lombok.*;
 import org.hibernate.validator.constraints.LuhnCheck;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.text.DateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter @Setter
 @AllArgsConstructor
@@ -56,11 +50,15 @@ public class Transaction {
     @Past
     private LocalDateTime date;
 
-    @Column(nullable = false)
+    @Column
     @Enumerated(value = EnumType.STRING)
     private TransactionStatus result;
 
     @Column
     @Enumerated(value = EnumType.STRING)
     private TransactionStatus feedback;
+
+    public String getFeedback() {
+        return feedback == null ? "" : feedback.name();
+    }
 }
