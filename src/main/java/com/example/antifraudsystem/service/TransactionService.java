@@ -3,6 +3,7 @@ package com.example.antifraudsystem.service;
 import com.example.antifraudsystem.TransactionResponse;
 import com.example.antifraudsystem.entity.Feedback;
 import com.example.antifraudsystem.entity.Transaction;
+import com.example.antifraudsystem.entity.TransactionLimit;
 import com.example.antifraudsystem.enums.RegionCode;
 import com.example.antifraudsystem.enums.TransactionStatus;
 import com.example.antifraudsystem.repository.CardRepository;
@@ -30,16 +31,19 @@ public class TransactionService {
     private IpRepository ipRepository;
     private TransactionRepository transactionRepository;
     private TransactionLimitRepository limitRepository;
+    private TransactionLimitService limitService;
 
     @Autowired
     public TransactionService(CardRepository cardRepository,
                               IpRepository ipRepository,
                               TransactionRepository transactionRepository,
-                              TransactionLimitRepository limitRepository) {
+                              TransactionLimitRepository limitRepository,
+                              TransactionLimitService limitService) {
         this.cardRepository = cardRepository;
         this.ipRepository = ipRepository;
         this.transactionRepository = transactionRepository;
         this.limitRepository = limitRepository;
+        this.limitService = limitService;
     }
 
     public ResponseEntity<?> addTransactionToDataBase(Transaction transaction) {
@@ -156,9 +160,11 @@ public class TransactionService {
 
     private TransactionStatus amountCheck(long amount) {
         LOGGER.info("Checking amount {}", amount);
-        long allowedAmount = limitRepository.findByStatus(TransactionStatus.ALLOWED).getLimit();
-        long manualAmount = limitRepository.findByStatus(TransactionStatus.MANUAL_PROCESSING).getLimit();
-        long prohibitedAmount = limitRepository.findByStatus(TransactionStatus.PROHIBITED).getLimit();
+        List<TransactionLimit> limits = limitRepository.findAll();
+
+        long allowedAmount = limits.get(0).getLimitValue();
+        long manualAmount = limits.get(1).getLimitValue();
+        long prohibitedAmount = limits.get(2).getLimitValue();
 
 
         if (amount <= allowedAmount) {
@@ -168,6 +174,8 @@ public class TransactionService {
         } else {
             return TransactionStatus.PROHIBITED;
         }
+
+
     }
 
     public List<Transaction> getAllTransactions() {
@@ -192,9 +200,12 @@ public class TransactionService {
         if (Objects.equals(feedback.getFeedback(), transaction.get().getResult())) {
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
+        Transaction t = transaction.get();
 
+        limitService.processNewLimit(t.getResult(), feedback.getFeedback(), t.getAmount());
+        t.setFeedback(feedback.getFeedback());
+        transactionRepository.save(t);
 
-
-        return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        return new ResponseEntity<>(t, HttpStatus.OK);
     }
 }

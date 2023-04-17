@@ -15,18 +15,19 @@ import lombok.Setter;
 public class TransactionLimit {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Column
     @Enumerated(EnumType.STRING)
-    private TransactionStatus status;
+    private TransactionStatus statusTransaction;
 
     @Column
-    private long limit;
+    private long limitValue;
 
-    public TransactionLimit(TransactionStatus status, long limit) {
-        this.status = status;
-        this.limit = limit;
+    public TransactionLimit(TransactionStatus statusTransaction, long limitValue) {
+        this.statusTransaction = statusTransaction;
+        this.limitValue = limitValue;
     }
 }
 

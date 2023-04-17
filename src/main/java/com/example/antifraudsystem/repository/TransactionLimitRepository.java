@@ -4,8 +4,9 @@ import com.example.antifraudsystem.entity.TransactionLimit;
 import com.example.antifraudsystem.enums.TransactionStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface TransactionLimitRepository extends JpaRepository<TransactionLimit, Long> {
 
-    boolean existsByStatus(TransactionStatus status);
-    TransactionLimit findByStatus(TransactionStatus status);
+    boolean existsByStatusTransaction(TransactionStatus status);
 }
