@@ -3,6 +3,7 @@ package com.example.antifraudsystem.entity;
 
 import com.example.antifraudsystem.Ipv4;
 import com.example.antifraudsystem.enums.RegionCode;
+import com.example.antifraudsystem.enums.TransactionStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -54,4 +55,12 @@ public class Transaction {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Past
     private LocalDateTime date;
+
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private TransactionStatus result;
+
+    @Column
+    @Enumerated(value = EnumType.STRING)
+    private TransactionStatus feedback;
 }

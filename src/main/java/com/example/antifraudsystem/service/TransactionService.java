@@ -53,14 +53,12 @@ public class TransactionService {
         List<String> violations = new ArrayList<>();
 
         response.setResult(checkAmount(amount));
+        Map<String, Integer> correlations = correlationCheck(transaction);
 
         if (response.getResult() == TransactionStatus.PROHIBITED) {
             LOGGER.info("Adding amount violations");
             violations.add("amount");
         }
-
-        Map<String, Integer> correlations = correlationCheck(transaction);
-
         if (correlations.get("ip-correlation") == 3) {
             violations.add("ip-correlation");
             response.setResult(TransactionStatus.MANUAL_PROCESSING);
