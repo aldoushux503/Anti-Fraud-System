@@ -1,6 +1,7 @@
 package com.example.antifraudsystem.service;
 
 import com.example.antifraudsystem.TransactionResponse;
+import com.example.antifraudsystem.entity.Feedback;
 import com.example.antifraudsystem.entity.Transaction;
 import com.example.antifraudsystem.enums.RegionCode;
 import com.example.antifraudsystem.enums.TransactionStatus;
@@ -168,5 +169,9 @@ public class TransactionService {
     public List<Transaction> getTransactionsByNumber(String number) {
         LOGGER.info("Getting transactions by a card number");
         return transactionRepository.findAllByNumber(number);
+    }
+
+    public ResponseEntity<?> addFeedbackToTransaction(Feedback feedback) {
+        return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
     }
 }
