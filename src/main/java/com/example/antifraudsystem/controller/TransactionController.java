@@ -1,5 +1,6 @@
 package com.example.antifraudsystem.controller;
 
+import com.example.antifraudsystem.entity.Feedback;
 import com.example.antifraudsystem.entity.Transaction;
 import com.example.antifraudsystem.service.TransactionService;
 import jakarta.validation.Valid;
@@ -52,4 +53,10 @@ public class TransactionController {
         }
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
+
+    @PutMapping("/transaction")
+    public ResponseEntity<?> makeFeedback(@RequestBody Feedback feedback) {
+        return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+    }
+
 }
