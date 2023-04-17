@@ -15,9 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,14 +43,14 @@ public class TransactionService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<?> makeTransaction(Transaction transaction) {
+    public ResponseEntity<?> processTransaction(Transaction transaction) {
         long amount = transaction.getAmount();
         String cardNumber = transaction.getNumber();
         String ipAddress = transaction.getIp();
         TransactionResponse response = new TransactionResponse();
         List<String> violations = new ArrayList<>();
 
-        response.setResult(checkAmount(amount));
+        response.setResult(amountCheck(amount));
         Map<String, Integer> correlations = correlationCheck(transaction);
 
         if (response.getResult() == TransactionStatus.PROHIBITED) {
@@ -146,7 +144,7 @@ public class TransactionService {
     }
 
 
-    private TransactionStatus checkAmount(long amount) {
+    private TransactionStatus amountCheck(long amount) {
         LOGGER.info("Checking amount {}", amount);
         if (amount <= 200) {
             return TransactionStatus.ALLOWED;

@@ -1,6 +1,5 @@
 package com.example.antifraudsystem.controller;
 
-import com.example.antifraudsystem.enums.TransactionStatus;
 import com.example.antifraudsystem.entity.Transaction;
 import com.example.antifraudsystem.service.TransactionService;
 import jakarta.validation.Valid;
@@ -14,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Validated
 @RestController
@@ -29,9 +27,12 @@ public class TransactionController {
     }
 
     @PostMapping("/transaction")
-    public ResponseEntity<?> validateAmount(@RequestBody @Valid Transaction transaction) {
+    public ResponseEntity<?> makeTransaction(@RequestBody @Valid Transaction transaction) {
+        LOGGER.info("Saving transaction to database without result");
+        transactionService.addTransactionToDataBase(transaction);
+
         LOGGER.info("Processing transaction result and info {}, {}", transaction.getNumber(), transaction.getIp());
-        return transactionService.makeTransaction(transaction);
+        return transactionService.processTransaction(transaction);
     }
 
     @GetMapping("/transaction/history")
