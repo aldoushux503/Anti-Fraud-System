@@ -20,7 +20,7 @@ public class RoleService {
     }
 
     @Bean
-    public void addAllRoles() {
+    private void addAllRoles() {
         if (!roleRepository.existsByName(UserRole.ADMINISTRATOR)
                 || !roleRepository.existsByName(UserRole.MERCHANT)
                 || !roleRepository.existsByName(UserRole.SUPPORT)) {
