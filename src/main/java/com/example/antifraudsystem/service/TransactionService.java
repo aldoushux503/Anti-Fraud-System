@@ -181,6 +181,20 @@ public class TransactionService {
     }
 
     public ResponseEntity<?> addFeedbackToTransaction(Feedback feedback) {
+        Optional<Transaction> transaction = transactionRepository.findById(feedback.getTransactionId());
+
+        if (transaction.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (!transaction.get().getFeedback().isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        if (Objects.equals(feedback.getFeedback(), transaction.get().getResult())) {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+
+
         return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
     }
 }
