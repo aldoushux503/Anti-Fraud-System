@@ -55,7 +55,7 @@ public class TransactionController {
     }
 
     @PutMapping("/transaction")
-    public ResponseEntity<?> makeFeedback(@RequestBody Feedback feedback) {
+    public ResponseEntity<?> makeFeedback(@RequestBody @Valid Feedback feedback) {
         return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
     }
 
