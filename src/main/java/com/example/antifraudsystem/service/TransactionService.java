@@ -7,6 +7,7 @@ import com.example.antifraudsystem.enums.RegionCode;
 import com.example.antifraudsystem.enums.TransactionStatus;
 import com.example.antifraudsystem.repository.CardRepository;
 import com.example.antifraudsystem.repository.IpRepository;
+import com.example.antifraudsystem.repository.TransactionLimitRepository;
 import com.example.antifraudsystem.repository.TransactionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +29,17 @@ public class TransactionService {
     private CardRepository cardRepository;
     private IpRepository ipRepository;
     private TransactionRepository transactionRepository;
+    private TransactionLimitRepository limitRepository;
 
     @Autowired
     public TransactionService(CardRepository cardRepository,
                               IpRepository ipRepository,
-                              TransactionRepository transactionRepository) {
+                              TransactionRepository transactionRepository,
+                              TransactionLimitRepository limitRepository) {
         this.cardRepository = cardRepository;
         this.ipRepository = ipRepository;
         this.transactionRepository = transactionRepository;
+        this.limitRepository = limitRepository;
     }
 
     public ResponseEntity<?> addTransactionToDataBase(Transaction transaction) {
@@ -152,9 +156,14 @@ public class TransactionService {
 
     private TransactionStatus amountCheck(long amount) {
         LOGGER.info("Checking amount {}", amount);
-        if (amount <= 200) {
+        long allowedAmount = limitRepository.findByStatus(TransactionStatus.ALLOWED).getLimit();
+        long manualAmount = limitRepository.findByStatus(TransactionStatus.MANUAL_PROCESSING).getLimit();
+        long prohibitedAmount = limitRepository.findByStatus(TransactionStatus.PROHIBITED).getLimit();
+
+
+        if (amount <= allowedAmount) {
             return TransactionStatus.ALLOWED;
-        } else if (amount <= 1500) {
+        } else if (amount <= manualAmount) {
             return TransactionStatus.MANUAL_PROCESSING;
         } else {
             return TransactionStatus.PROHIBITED;
