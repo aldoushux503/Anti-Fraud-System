@@ -1,7 +1,7 @@
 package com.example.antifraudsystem.entity;
 
 
-import com.example.antifraudsystem.Ipv4;
+import com.example.antifraudsystem.util.Ipv4;
 import com.example.antifraudsystem.enums.RegionCode;
 import com.example.antifraudsystem.enums.TransactionStatus;
 import jakarta.persistence.*;

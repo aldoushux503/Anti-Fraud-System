@@ -1,6 +1,6 @@
 package com.example.antifraudsystem.controller;
 
-import com.example.antifraudsystem.Ipv4;
+import com.example.antifraudsystem.util.Ipv4;
 import com.example.antifraudsystem.entity.Ip;
 import com.example.antifraudsystem.service.SuspiciousIpService;
 import jakarta.validation.Valid;
