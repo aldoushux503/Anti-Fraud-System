@@ -77,6 +77,10 @@ Request the according endpoint in a format shown in the examples below.
 _'+' means the user with the role above can access that endpoint. '-' means the user with the role above does not have
 access to that endpoint._
 
+## Examples
+
+You can find examples for all endpoints in the [usage examples](docs/USAGE.md) in the `docs` folder.
+
 ### Region codes
 
 | Code | Region                           |
@@ -120,7 +124,6 @@ model-view-controller pattern. The application consists of the following compone
 - [Hibernate Validator](https://hibernate.org/validator/)
 - [H2 Database](https://www.h2database.com/)
 - [Lombok](https://projectlombok.org/)
-
 
 ## Conclusion
 This project demonstrates the principles of anti-fraud systems in the financial sector. It provides a starting point for building a more complete and robust system that can be tailored to specific business requirements.
