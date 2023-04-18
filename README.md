@@ -77,10 +77,6 @@ Request the according endpoint in a format shown in the examples below.
 _'+' means the user with the role above can access that endpoint. '-' means the user with the role above does not have
 access to that endpoint._
 
-## Examples
-
-You can find examples for all endpoints in the [usage examples](docs/USAGE.md) in the `docs` folder.
-
 ### Region codes
 
 | Code | Region                           |
@@ -92,6 +88,10 @@ You can find examples for all endpoints in the [usage examples](docs/USAGE.md) i
 | MENA | The Middle East and North Africa |
 | SA   | South Asia                       |
 | SSA  | Sub-Saharan Africa               |
+
+## Examples
+
+You can find examples for all endpoints in the [usage examples](docs/USAGE.md) in the `docs` folder.
 
 ## Architecture
 
