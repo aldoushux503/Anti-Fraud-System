@@ -2,19 +2,14 @@ package com.example.antifraudsystem.controller;
 
 import com.example.antifraudsystem.dto.UserLockDto;
 import com.example.antifraudsystem.dto.UserRoleDto;
-import com.example.antifraudsystem.entity.User;
 import com.example.antifraudsystem.service.AuthService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")

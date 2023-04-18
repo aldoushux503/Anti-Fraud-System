@@ -1,6 +1,6 @@
 package com.example.antifraudsystem.service;
 
-import com.example.antifraudsystem.entity.TransactionLimit;
+import com.example.antifraudsystem.entity.transaction.TransactionLimit;
 import com.example.antifraudsystem.enums.TransactionStatus;
 import com.example.antifraudsystem.repository.TransactionLimitRepository;
 import org.springframework.beans.factory.annotation.Autowired;

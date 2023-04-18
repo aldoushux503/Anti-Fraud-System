@@ -1,4 +1,4 @@
-package com.example.antifraudsystem.entity;
+package com.example.antifraudsystem.entity.transaction;
 
 
 import com.example.antifraudsystem.util.Ipv4;

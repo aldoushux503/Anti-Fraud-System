@@ -1,5 +1,6 @@
-package com.example.antifraudsystem.entity;
+package com.example.antifraudsystem.entity.user;
 
+import com.example.antifraudsystem.entity.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

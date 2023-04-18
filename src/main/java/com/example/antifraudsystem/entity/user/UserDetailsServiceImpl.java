@@ -1,7 +1,7 @@
-package com.example.antifraudsystem.service;
+package com.example.antifraudsystem.entity.user;
 
-import com.example.antifraudsystem.UserDetailsImpl;
-import com.example.antifraudsystem.entity.User;
+import com.example.antifraudsystem.entity.user.UserDetailsImpl;
+import com.example.antifraudsystem.entity.user.User;
 import com.example.antifraudsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

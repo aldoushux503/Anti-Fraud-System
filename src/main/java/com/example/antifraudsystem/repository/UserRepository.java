@@ -1,8 +1,7 @@
 package com.example.antifraudsystem.repository;
 
-import com.example.antifraudsystem.entity.User;
+import com.example.antifraudsystem.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

@@ -1,9 +1,9 @@
 package com.example.antifraudsystem.service;
 
-import com.example.antifraudsystem.TransactionResponse;
+import com.example.antifraudsystem.response.TransactionResponse;
 import com.example.antifraudsystem.entity.Feedback;
-import com.example.antifraudsystem.entity.Transaction;
-import com.example.antifraudsystem.entity.TransactionLimit;
+import com.example.antifraudsystem.entity.transaction.Transaction;
+import com.example.antifraudsystem.entity.transaction.TransactionLimit;
 import com.example.antifraudsystem.enums.RegionCode;
 import com.example.antifraudsystem.enums.TransactionStatus;
 import com.example.antifraudsystem.repository.CardRepository;

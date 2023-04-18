@@ -1,10 +1,9 @@
 package com.example.antifraudsystem.service;
 
-import com.example.antifraudsystem.controller.RegistrationController;
 import com.example.antifraudsystem.dto.UserLockDto;
 import com.example.antifraudsystem.dto.UserRoleDto;
 import com.example.antifraudsystem.entity.Role;
-import com.example.antifraudsystem.entity.User;
+import com.example.antifraudsystem.entity.user.User;
 import com.example.antifraudsystem.enums.ActivityOperation;
 import com.example.antifraudsystem.enums.UserRole;
 import com.example.antifraudsystem.repository.RoleRepository;

@@ -1,7 +1,7 @@
 package com.example.antifraudsystem.controller;
 
 import com.example.antifraudsystem.entity.Feedback;
-import com.example.antifraudsystem.entity.Transaction;
+import com.example.antifraudsystem.entity.transaction.Transaction;
 import com.example.antifraudsystem.service.TransactionService;
 import jakarta.validation.Valid;
 import org.hibernate.validator.constraints.LuhnCheck;

@@ -1,6 +1,6 @@
-package com.example.antifraudsystem;
+package com.example.antifraudsystem.entity.user;
 
-import com.example.antifraudsystem.entity.User;
+import com.example.antifraudsystem.entity.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
