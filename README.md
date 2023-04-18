@@ -89,6 +89,10 @@ access to that endpoint._
 | SA   | South Asia                       |
 | SSA  | Sub-Saharan Africa               |
 
+## Examples
+
+You can find examples for all endpoints in the [usage examples](docs/USAGE.md) in the `docs` folder.
+
 ## Architecture
 
 The system is built on a [Spring Framework](https://spring.io/) application context. The application itself follows the
@@ -120,7 +124,6 @@ model-view-controller pattern. The application consists of the following compone
 - [Hibernate Validator](https://hibernate.org/validator/)
 - [H2 Database](https://www.h2database.com/)
 - [Lombok](https://projectlombok.org/)
-
 
 ## Conclusion
 This project demonstrates the principles of anti-fraud systems in the financial sector. It provides a starting point for building a more complete and robust system that can be tailored to specific business requirements.
