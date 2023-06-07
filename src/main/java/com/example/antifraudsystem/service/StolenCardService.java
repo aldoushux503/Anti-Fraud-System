@@ -2,6 +2,7 @@ package com.example.antifraudsystem.service;
 
 import com.example.antifraudsystem.entity.Card;
 import com.example.antifraudsystem.repository.CardRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class StolenCardService {
-    private final Logger LOGGER = LoggerFactory.getLogger(StolenCardService.class);
+
     private CardRepository cardRepository;
     @Autowired
     public StolenCardService(CardRepository cardRepository) {
@@ -25,11 +27,11 @@ public class StolenCardService {
 
     public ResponseEntity<?> addStolenCardToDataBase(Card card) {
         if (cardRepository.existsByNumber(card.getNumber())) {
-            LOGGER.error("Card already exist in database {}", card.getNumber());
+            log.error("Card already exist in database {}", card.getNumber());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        LOGGER.info("Saving card to database {}", card);
+        log.info("Saving card to database {}", card);
         cardRepository.save(card);
         return new ResponseEntity<>(card, HttpStatus.OK);
     }
@@ -38,11 +40,11 @@ public class StolenCardService {
         Optional<Card> card = cardRepository.findByNumber(number);
 
         if (card.isEmpty()) {
-            LOGGER.error("Card not found in database {}", number);
+            log.error("Card not found in database {}", number);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        LOGGER.info("Deleting card from database {}", number);
+        log.info("Deleting card from database {}", number);
         cardRepository.delete(card.get());
 
         String res = String.format("Card %s successfully removed!", card.get().getNumber());

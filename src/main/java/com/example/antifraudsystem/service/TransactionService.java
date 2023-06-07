@@ -10,6 +10,7 @@ import com.example.antifraudsystem.repository.CardRepository;
 import com.example.antifraudsystem.repository.IpRepository;
 import com.example.antifraudsystem.repository.TransactionLimitRepository;
 import com.example.antifraudsystem.repository.TransactionRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class TransactionService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
     private CardRepository cardRepository;
     private IpRepository ipRepository;
     private TransactionRepository transactionRepository;
@@ -47,7 +48,7 @@ public class TransactionService {
     }
 
     public ResponseEntity<?> addTransactionToDataBase(Transaction transaction) {
-        LOGGER.info("Saving transaction to database");
+        log.info("Saving transaction to database");
         transactionRepository.save(transaction);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -63,7 +64,7 @@ public class TransactionService {
         Map<String, Integer> correlations = correlationCheck(transaction);
 
         if (response.getResult() == TransactionStatus.PROHIBITED) {
-            LOGGER.info("Adding amount violations");
+            log.info("Adding amount violations");
             violations.add("amount");
         }
         if (correlations.get("ip-correlation") == 3) {
@@ -83,12 +84,12 @@ public class TransactionService {
             response.setResult(TransactionStatus.PROHIBITED);
         }
         if (cardRepository.existsByNumber(cardNumber)) {
-            LOGGER.info("Adding credit card violations");
+            log.info("Adding credit card violations");
             violations.add("card-number");
             response.setResult(TransactionStatus.PROHIBITED);
         }
         if (ipRepository.existsByAddress(ipAddress)) {
-            LOGGER.info("Adding IP violations");
+            log.info("Adding IP violations");
             violations.add("ip");
             response.setResult(TransactionStatus.PROHIBITED);
         }
@@ -105,7 +106,7 @@ public class TransactionService {
         this.addTransactionToDataBase(transaction);
 
 
-        LOGGER.info("Returning transaction response {} {}", response.getResult(), response.getInfo());
+        log.info("Returning transaction response {} {}", response.getResult(), response.getInfo());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -159,7 +160,7 @@ public class TransactionService {
 
 
     private TransactionStatus amountCheck(long amount) {
-        LOGGER.info("Checking amount {}", amount);
+        log.info("Checking amount {}", amount);
         List<TransactionLimit> limits = limitRepository.findAll();
 
         long allowedAmount = limits.get(0).getLimitValue();
@@ -179,12 +180,12 @@ public class TransactionService {
     }
 
     public List<Transaction> getAllTransactions() {
-        LOGGER.info("Getting all transactions");
+        log.info("Getting all transactions");
         return transactionRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     public List<Transaction> getTransactionsByNumber(String number) {
-        LOGGER.info("Getting transactions by a card number");
+        log.info("Getting transactions by a card number");
         return transactionRepository.findAllByNumber(number);
     }
 

@@ -2,6 +2,7 @@ package com.example.antifraudsystem.service;
 
 import com.example.antifraudsystem.entity.Ip;
 import com.example.antifraudsystem.repository.IpRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class SuspiciousIpService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(SuspiciousIpService.class);
+
     private IpRepository ipRepository;
 
     @Autowired
@@ -29,11 +31,11 @@ public class SuspiciousIpService {
         String ipAddress = ip.getAddress();
 
         if (ipRepository.existsByAddress(ipAddress)) {
-            LOGGER.error("IP already exists {}", ipAddress);
+            log.error("IP already exists {}", ipAddress);
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        LOGGER.info("Saving IP to database {}", ipAddress);
+        log.info("Saving IP to database {}", ipAddress);
         ipRepository.save(ip);
         return new ResponseEntity<>(ip, HttpStatus.OK);
     }
@@ -43,11 +45,11 @@ public class SuspiciousIpService {
         Optional<Ip> ip = ipRepository.findIpByAddress(ipAddress);
 
         if (ip.isEmpty()) {
-            LOGGER.error("IP address not found {}", ipAddress);
+            log.error("IP address not found {}", ipAddress);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        LOGGER.info("Deleting IP from database {}", ipAddress);
+        log.info("Deleting IP from database {}", ipAddress);
         ipRepository.delete(ip.get());
 
         String res = String.format("IP %s successfully removed!", ip.get().getAddress());
